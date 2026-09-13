@@ -238,6 +238,109 @@
     color: var(--accent);
   }
 
+  /* ===== 搜索框 ===== */
+  .search-wrap {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 2rem 1.2rem;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 0.85rem 1.1rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+  }
+
+  .search-wrap input:focus { outline: none; border-color: var(--accent); }
+
+  .search-empty {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0.5rem 2rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .search-empty[hidden] { display: none; }
+
+  /* ===== 区块标题 ===== */
+  .kicker {
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.7rem;
+  }
+
+  .headline {
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 2.4rem;
+  }
+
+  /* ===== 赞助栏 ===== */
+  .sponsor-section {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 4.5rem 2rem 0;
+  }
+
+  .sponsor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .sponsor-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 1.5rem 1.8rem;
+    box-shadow: var(--shadow-card);
+    transition: border-color 0.3s ease;
+  }
+
+  .sponsor-card:hover { border-color: var(--accent-soft); }
+
+  .sponsor-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .sponsor-card p {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .sponsor-btn {
+    flex-shrink: 0;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease, filter 0.25s ease;
+  }
+
+  .sponsor-btn svg { width: 24px; height: 24px; fill: #fff; }
+  .sponsor-btn:hover { transform: scale(1.08); filter: brightness(1.1); }
+
   /* ===== 页脚 ===== */
   .footer-links {
     max-width: 1060px;
@@ -286,6 +389,10 @@
     .nav-links { display: none; }
     .hero { padding: 7.5rem 1.3rem 3rem; }
     .shop-grid { grid-template-columns: 1fr; padding: 2rem 1.3rem 0; }
+    .search-wrap { padding: 0 1.3rem 1.2rem; }
+    .search-empty { padding: 0.5rem 1.3rem 0; }
+    .sponsor-section { padding: 3.5rem 1.3rem 0; }
+    .sponsor-card { padding: 1.2rem 1.3rem; }
     .footer-links { gap: 2rem; padding: 2rem 1.3rem 0; }
   }
 
@@ -378,6 +485,12 @@
   <div class="sub">把热爱挂在身上。</div>
 </section>
 
+<!-- ===== 搜索 ===== -->
+<div class="search-wrap reveal">
+  <input type="search" id="shopSearch" placeholder="搜索商品…" autocomplete="off" />
+</div>
+<p class="search-empty" id="searchEmpty" hidden>没有找到相关商品。</p>
+
 <!-- ===== 商品格子 ===== -->
 <section class="shop-grid" id="shopGrid">
 
@@ -393,6 +506,32 @@
     </div>
   </a>
 
+</section>
+
+<!-- ===== 赞助栏 ===== -->
+<section class="sponsor-section" id="sponsor">
+  <div class="kicker">赞助</div>
+  <h2 class="headline">支持我们。</h2>
+  <div class="sponsor-list">
+    <div class="sponsor-card reveal" style="--reveal-delay:0s">
+      <div>
+        <h3>激励 Caelus Studio</h3>
+        <p>喜欢我们的作品？你的每一份支持都是我们持续创作的动力。</p>
+      </div>
+      <a class="sponsor-btn" href="https://ifdian.net/a/caelustudio" target="_blank" rel="noopener" aria-label="激励 Caelus Studio">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </a>
+    </div>
+    <div class="sponsor-card reveal" style="--reveal-delay:0.08s">
+      <div>
+        <h3>TreeOS 赞助</h3>
+        <p>支持 TreeOS 独立分支的持续维护与更新。</p>
+      </div>
+      <a class="sponsor-btn" href="https://ifdian.net/a/treeos" target="_blank" rel="noopener" aria-label="TreeOS 赞助">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </a>
+    </div>
+  </div>
 </section>
 
 <!-- ===== 页脚 ===== -->
@@ -457,6 +596,31 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+})();
+
+/* ===== 商品搜索（实时过滤） ===== */
+(function() {
+  var input = document.getElementById('shopSearch');
+  var empty = document.getElementById('searchEmpty');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.product-card'));
+  if (!input) return;
+
+  function showAll() {
+    cards.forEach(function(c) { c.style.display = ''; });
+    empty.hidden = true;
+  }
+
+  input.addEventListener('input', function() {
+    var q = input.value.trim().toLowerCase();
+    if (!q) { showAll(); return; }
+    var shown = 0;
+    cards.forEach(function(c) {
+      var hit = c.textContent.toLowerCase().indexOf(q) !== -1;
+      c.style.display = hit ? '' : 'none';
+      if (hit) shown++;
+    });
+    empty.hidden = shown > 0;
+  });
 })();
 </script>
 
