@@ -28,7 +28,7 @@
     --shadow-card: 0 4px 16px rgba(0,0,0,0.3);
     --accent: #0a84ff;
     --accent-soft: rgba(10,132,255,0.12);
-    --price-color: #e04343;
+    --price-color: #0a84ff;
     --footer-color: #555;
     --footer-highlight: #666;
   }
@@ -43,7 +43,7 @@
     --shadow-card: 0 4px 16px rgba(0,0,0,0.06);
     --accent: #0a84ff;
     --accent-soft: rgba(10,132,255,0.10);
-    --price-color: #e04343;
+    --price-color: #0a84ff;
     --footer-color: #999;
     --footer-highlight: #aaa;
   }
@@ -180,6 +180,7 @@
   .detail-price {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     gap: 0.8rem;
   }
 
@@ -199,11 +200,6 @@
     font-weight: 500;
     line-height: 1.1;
     color: var(--price-color);
-  }
-
-  .price-note {
-    font-size: 1rem;
-    color: var(--text-muted);
   }
 
   .feature-list li {
@@ -463,7 +459,6 @@
       <div class="detail-price">
         <span class="price-now">￥9.9</span>
         <span class="price-unit"><span>元</span><span>/个</span></span>
-        <span class="price-note">单独联系工作室购买</span>
       </div>
       <p class="desc">Caelus Studio 官方出品钥匙扣，精致透明亚克力质感，适合挂在钥匙串、书包或工作包上。</p>
       <ul class="feature-list">
