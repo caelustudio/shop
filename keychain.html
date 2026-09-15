@@ -315,6 +315,8 @@
     color: var(--text-muted);
     line-height: 1.7;
   }
+  .form-note a { color: inherit; text-decoration: underline; }
+  .form-note a:hover { color: var(--text); }
 
   /* ===== 页脚 ===== */
   .footer-links {
@@ -506,14 +508,6 @@
           <input type="number" name="数量" required min="1" max="10" value="1" />
         </div>
         <div class="field">
-          <label>是否已加入 Caelus Studio QQ 群 <b>*</b></label>
-          <select name="是否已加入QQ群" required>
-            <option value="" selected disabled>请选择</option>
-            <option value="是">是，已加入</option>
-            <option value="否">否</option>
-          </select>
-        </div>
-        <div class="field">
           <label>备注</label>
           <input type="text" name="备注" maxlength="100" placeholder="选填" />
         </div>
@@ -533,7 +527,7 @@
           });
         })();
       </script>
-        <p class="form-note">我们将在 15 个工作日内联系你并发货。</p>
+        <p class="form-note">我们将在 15 个工作日内联系你并发货。购买即代表你同意<a href="https://caelustudio.feishu.cn/wiki/space/7668877677914278860?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home" target="_blank" rel="noopener">《Caelus Studio 周边产品发放及购买协议》</a>及相关协议和政策。</p>
       </div>
     </form>
   </div>
