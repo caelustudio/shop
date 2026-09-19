@@ -17,6 +17,7 @@
     '元旦限定主题吧唧，高清印刷覆膜，色彩饱满不易褪色，可别在包袋、衣领或帽檐上，也适合收进收纳盒慢慢收藏。': ['元旦限定主题吧唧，高清印刷覆膜，色彩饱满不易褪色，可别在包袋、衣领或帽檐上，也适合收进收纳盒慢慢收藏。', '元旦限定主題吧唧，高清印刷覆膜，色彩飽滿不易褪色，可別在包袋、衣領或帽簷上，也適合收進收納盒慢慢收藏。', 'A New Year\'s Day limited badge with high-definition laminated printing — rich, fade-resistant colours. Pin it to your bag, collar or hat brim, or keep it in a case as part of your collection.'],
     '暂无预览': ['暂无预览', '暫無預覽', 'No preview yet'],
     '尚未发售': ['尚未发售', '尚未發售', 'Not yet on sale'],
+    '预计12.29-12.30开始发售': ['预计12.29-12.30开始发售', '預計12.29-12.30開始發售', 'Expected on sale 12.29-12.30'],
     '赞助': ['赞助', '贊助', 'Sponsor'],
     '支持我们。': ['支持我们。', '支持我們。', 'Support us.'],
     '激励 Caelus Studio': ['激励 Caelus Studio', '激勵 Caelus Studio', 'Back Caelus Studio'],
