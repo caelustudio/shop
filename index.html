@@ -13,6 +13,7 @@
   1. 复制 keychain.html 作为商品详情/购买页（改标题、图片、价格、表单 _subject）
   2. 图片放进 assets/
   3. 在下方「商品格子」处复制一个 <a class="product-card"> 放到最前面
+  4. 重新生成搜索索引：npx pagefind --site .（提交 pagefind/ 目录）
 ============================================================ -->
   <script>
     (function() {
@@ -607,28 +608,59 @@
   onScroll();
 })();
 
-/* ===== 商品搜索（实时过滤） ===== */
+/* ===== 商品搜索（Pagefind 全文 + DOM 过滤兜底） ===== */
 (function() {
   var input = document.getElementById('shopSearch');
   var empty = document.getElementById('searchEmpty');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.product-card'));
   if (!input) return;
 
+  var pf = null;
+  import('./pagefind/pagefind.js').then(function(m) { pf = m; }).catch(function() {});
+  var timer = null;
+
   function showAll() {
     cards.forEach(function(c) { c.style.display = ''; });
     empty.hidden = true;
   }
 
-  input.addEventListener('input', function() {
-    var q = input.value.trim().toLowerCase();
-    if (!q) { showAll(); return; }
+  function domFilter(q) {
     var shown = 0;
     cards.forEach(function(c) {
-      var hit = c.textContent.toLowerCase().indexOf(q) !== -1;
+      var hit = c.textContent.toLowerCase().indexOf(q.toLowerCase()) !== -1;
       c.style.display = hit ? '' : 'none';
       if (hit) shown++;
     });
     empty.hidden = shown > 0;
+  }
+
+  async function run() {
+    var q = input.value.trim();
+    if (!q) { showAll(); return; }
+    if (!pf || !pf.search) { domFilter(q); return; }
+    try {
+      var res = await pf.search(q);
+      var urls = {};
+      var list = res.results.slice(0, 50);
+      for (var i = 0; i < list.length; i++) {
+        var d = await list[i].data();
+        urls[d.url.replace(/^\//, '')] = true;
+      }
+      var shown = 0;
+      cards.forEach(function(c) {
+        var hit = !!urls[c.getAttribute('href')];
+        c.style.display = hit ? '' : 'none';
+        if (hit) shown++;
+      });
+      empty.hidden = shown > 0;
+    } catch (e) {
+      domFilter(q);
+    }
+  }
+
+  input.addEventListener('input', function() {
+    clearTimeout(timer);
+    timer = setTimeout(run, 200);
   });
 })();
 </script>
