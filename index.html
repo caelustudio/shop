@@ -258,6 +258,20 @@
     letter-spacing: 0.05em;
   }
 
+  .card-status-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .card-eta {
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+  }
+
   /* ===== 搜索框 ===== */
   .search-wrap {
     max-width: 1060px;
@@ -541,7 +555,10 @@
       <h2>元旦主题吧唧</h2>
       <p>元旦限定主题吧唧，高清印刷覆膜，色彩饱满不易褪色，可别在包袋、衣领或帽檐上，也适合收进收纳盒慢慢收藏。</p>
       <div class="card-foot">
-        <span class="card-status">尚未发售</span>
+        <div class="card-status-group">
+          <span class="card-status">尚未发售</span>
+          <span class="card-eta">预计12.29-12.30开始发售</span>
+        </div>
       </div>
     </div>
   </div>
