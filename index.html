@@ -514,7 +514,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .pay-overlay[hidden]{display:none}
 /* 站点的自定义光标原本 z-index 9999，会被弹窗盖住导致弹窗内看不到鼠标；
    提到弹窗之上，它本身 pointer-events:none，不影响点击 */
-.custom-cursor{z-index:2147483001}
+.custom-cursor{z-index:2147483600}
 .pay-modal{position:relative;margin:auto;width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;text-align:center;pointer-events:auto}
 .pay-close{position:absolute;top:6px;right:8px;z-index:2;width:36px;height:36px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;pointer-events:auto}
 .pay-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
