@@ -413,21 +413,12 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   </div>
 </div>
 <script>
-/* ===== 商店维护提示：每次进入站点提示一次，关闭后本次浏览不再弹出 ===== */
+/* ===== 商店维护提示：常驻显示，不可关闭 ===== */
 (function () {
   var overlay = document.getElementById('maintOverlay');
   if (!overlay) return;
-  var KEY = 'maint_notice_shown';
-  var shown = false;
-  try { shown = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
-  if (!shown) overlay.hidden = false;
-
-  function close() {
-    overlay.hidden = true;
-    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
-  }
-  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  // 维护期间常驻显示：点击遮罩、按 Esc 均不会关闭
+  overlay.hidden = false;
 })();
 </script>
 </body>
