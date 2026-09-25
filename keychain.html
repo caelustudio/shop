@@ -668,11 +668,11 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   </div>
 </div>
 <script>
-/* ===== 商店维护提示：常驻显示，不可关闭 ===== */
+/* ===== 商店维护提示：把 MAINTENANCE 改为 true 即开启（常驻，不可关闭） ===== */
 (function () {
+  var MAINTENANCE = false;
   var overlay = document.getElementById('maintOverlay');
-  if (!overlay) return;
-  // 维护期间常驻显示：点击遮罩、按 Esc 均不会关闭
+  if (!overlay || !MAINTENANCE) return;
   overlay.hidden = false;
 })();
 </script>
