@@ -510,10 +510,13 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 
 <style>
 /* ===== 在线支付弹窗（追加，不改动既有样式） ===== */
-.pay-overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pay-overlay{position:fixed;inset:0;z-index:2147483000;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:auto}
 .pay-overlay[hidden]{display:none}
-.pay-modal{position:relative;width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;text-align:center}
-.pay-close{position:absolute;top:10px;right:14px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;cursor:pointer}
+/* 站点的自定义光标原本 z-index 9999，会被弹窗盖住导致弹窗内看不到鼠标；
+   提到弹窗之上，它本身 pointer-events:none，不影响点击 */
+.custom-cursor{z-index:2147483001}
+.pay-modal{position:relative;margin:auto;width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;text-align:center;pointer-events:auto}
+.pay-close{position:absolute;top:6px;right:8px;z-index:2;width:36px;height:36px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;pointer-events:auto}
 .pay-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
 .pay-amount{margin:0;font-size:1.7rem;font-weight:700;color:var(--price-color)}
 .pay-qr{margin:16px 0;display:flex;justify-content:center;min-height:220px}
@@ -524,7 +527,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .pay-status.ok{color:#30d158;font-weight:600}
 .pay-status.err{color:#ff6b6b}
 .pay-order{margin:6px 0 0;font-size:.76rem;color:var(--text-muted);word-break:break-all}
-.pay-btn{display:block;width:100%;margin-top:12px;text-align:center;background:var(--accent);color:#fff;font-size:.9rem;padding:.6rem 1rem;border-radius:10px;transition:filter .25s ease}
+.pay-btn{position:relative;z-index:1;display:block;width:100%;margin-top:12px;text-align:center;background:var(--accent);color:#fff;font-size:.9rem;padding:.6rem 1rem;border-radius:10px;transition:filter .25s ease;pointer-events:auto}
 .pay-btn:hover{filter:brightness(1.1)}
 @media (prefers-reduced-motion:reduce){.pay-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
@@ -898,6 +901,12 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     btn.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pay(hit.id); }
     });
+    // 本站点隐藏了原生光标，span 不在其 hover 绑定列表内，这里手动给出光标反馈
+    var cursorEl = document.getElementById('customCursor');
+    if (cursorEl) {
+      btn.addEventListener('mouseenter', function () { cursorEl.classList.add('hover'); });
+      btn.addEventListener('mouseleave', function () { cursorEl.classList.remove('hover'); });
+    }
     body.appendChild(btn);
   });
 
