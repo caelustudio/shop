@@ -955,36 +955,19 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       .then(function () { btn.disabled = false; });
   });
 
-  // 与旧版一致：仅给配置了支付的商品卡片注入「立即购买」按钮
+  // 不再注入「立即购买」按钮：点击整张商品卡片直接打开支付弹窗
   Array.prototype.forEach.call(document.querySelectorAll('.product-card'), function (card) {
     var href = card.getAttribute('href') || '';
     var hit = null;
     for (var i = 0; i < PRODUCTS.length; i++) {
       if (href.indexOf(PRODUCTS[i].match) !== -1) { hit = PRODUCTS[i]; break; }
     }
-    var body = card.querySelector('.body');
-    if (!hit || !body) return;
-
-    var btn = document.createElement('span');
-    btn.className = 'pay-btn';
-    btn.setAttribute('role', 'button');
-    btn.setAttribute('tabindex', '0');
-    btn.textContent = '立即购买';
-    btn.addEventListener('click', function (e) {
+    if (!hit) return;
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function (e) {
       e.preventDefault();
-      e.stopPropagation();
       openPay(hit);
     });
-    btn.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPay(hit); }
-    });
-    var cursorEl = document.getElementById('customCursor');
-    if (cursorEl) {
-      btn.addEventListener('mouseenter', function () { cursorEl.classList.add('hover'); });
-      btn.addEventListener('mouseleave', function () { cursorEl.classList.remove('hover'); });
-    }
-    var foot = body.querySelector('.card-foot');
-    if (foot) foot.appendChild(btn); else body.appendChild(btn);
   });
 })();
 </script>
