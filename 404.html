@@ -303,6 +303,19 @@ html,body{font-family:'OPPO Sans 4.0','PingFang SC','Microsoft YaHei',system-ui,
 h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentColor}
 </style>
 
+<style>
+/* ===== 商店维护提示（追加，不改动既有样式） ===== */
+.maint-overlay{position:fixed;inset:0;z-index:2147483000;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.maint-overlay[hidden]{display:none}
+/* 站点自定义光标需高于提示层，否则提示内看不到鼠标 */
+.custom-cursor{z-index:2147483001}
+.maint-modal{position:relative;margin:auto;width:100%;max-width:320px;background:var(--bg-card,#111);border:1px solid var(--border-color,rgba(255,255,255,.1));border-radius:18px;box-shadow:var(--shadow-card,0 4px 16px rgba(0,0,0,.3));padding:26px 22px;text-align:center;pointer-events:auto}
+.maint-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:.6rem;color:var(--text-primary,#f0f0f0)}
+.maint-modal p{margin:0;font-size:.88rem;font-weight:300;color:var(--text-secondary,#d0d0d0);line-height:1.75}
+.maint-btn{margin-top:18px;width:100%;border:0;background:var(--accent,#0a84ff);color:#fff;font-size:.9rem;padding:.6rem 1rem;border-radius:10px;cursor:pointer}
+.maint-btn:hover{filter:brightness(1.1)}
+@media (prefers-reduced-motion:reduce){.maint-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
 </head>
 <body data-page-node-id="53oRHMyZibBINIKwi3iFBa">
 
@@ -394,5 +407,33 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       });
     })();
   </script>
+<!-- ===== 商店维护提示（追加） ===== -->
+<div class="maint-overlay" id="maintOverlay" hidden>
+  <div class="maint-modal" role="dialog" aria-modal="true" aria-labelledby="maintTitle">
+    <h3 id="maintTitle">商店维护中</h3>
+    <p>商店正在维护升级，暂时无法下单。<br>恢复时间请留意公告，感谢你的理解。</p>
+    <button class="maint-btn" id="maintBtn" type="button">我知道了</button>
+  </div>
+</div>
+<script>
+/* ===== 商店维护提示：每次进入站点提示一次，关闭后本次浏览不再弹出 ===== */
+(function () {
+  var overlay = document.getElementById('maintOverlay');
+  if (!overlay) return;
+  var btn = document.getElementById('maintBtn');
+  var KEY = 'maint_notice_shown';
+  var shown = false;
+  try { shown = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+  if (!shown) overlay.hidden = false;
+
+  function close() {
+    overlay.hidden = true;
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+  }
+  if (btn) btn.addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
 </body>
 </html>
