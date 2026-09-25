@@ -508,6 +508,26 @@ html,body{font-family:'OPPO Sans 4.0','PingFang SC','Microsoft YaHei',system-ui,
 h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentColor}
 </style>
 
+<style>
+/* ===== 在线支付弹窗（追加，不改动既有样式） ===== */
+.pay-overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pay-overlay[hidden]{display:none}
+.pay-modal{position:relative;width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;text-align:center}
+.pay-close{position:absolute;top:10px;right:14px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;cursor:pointer}
+.pay-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+.pay-amount{margin:0;font-size:1.7rem;font-weight:700;color:var(--price-color)}
+.pay-qr{margin:16px 0;display:flex;justify-content:center;min-height:220px}
+.pay-qr canvas{border-radius:10px;background:#fff;padding:8px}
+.pay-tip{margin:0 0 10px;font-size:.85rem;font-weight:300;color:var(--text-secondary);line-height:1.6}
+.pay-muted{display:block;font-size:.76rem;color:var(--text-muted)}
+.pay-status{margin:6px 0 0;font-size:.9rem;color:var(--text-secondary)}
+.pay-status.ok{color:#30d158;font-weight:600}
+.pay-status.err{color:#ff6b6b}
+.pay-order{margin:6px 0 0;font-size:.76rem;color:var(--text-muted);word-break:break-all}
+.pay-btn{display:block;width:100%;margin-top:12px;text-align:center;background:var(--accent);color:#fff;font-size:.9rem;padding:.6rem 1rem;border-radius:10px;transition:filter .25s ease}
+.pay-btn:hover{filter:brightness(1.1)}
+@media (prefers-reduced-motion:reduce){.pay-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
 </head>
 <body>
 
@@ -720,6 +740,19 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 })();
 </script>
 
+<!-- ===== 在线支付弹窗（追加） ===== -->
+<div class="pay-overlay" id="payOverlay" hidden>
+  <div class="pay-modal" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+    <button class="pay-close" id="payClose" aria-label="关闭">&times;</button>
+    <h3 id="payTitle">扫码支付</h3>
+    <p class="pay-amount" id="payAmount"></p>
+    <div class="pay-qr"><canvas id="payQr"></canvas></div>
+    <p class="pay-tip">请使用 <strong>微信「扫一扫」</strong> 完成支付<span class="pay-muted">长按识别 / 相册识别无效</span></p>
+    <p class="pay-status" id="payStatus">正在生成支付二维码…</p>
+    <p class="pay-order" id="payOrder"></p>
+  </div>
+</div>
+
 <div class="custom-cursor" id="customCursor"></div>
 <script>
   // ===== 自定义圆形光标 =====
@@ -755,5 +788,123 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 </script>
 <script>(function(){if(window.top!==window.self)return;var T='https://caelus-terminal.app.workbuddy.host/api/collect';function t(e,m){try{m=m||{};if(document.title&&!m.title)m.title=String(document.title).replace(/\s*[·|-]\s*Caelus Studio.*$/i,'').slice(0,60);var v=localStorage.getItem('caelus_vid');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('caelus_vid',v)}navigator.sendBeacon(T,JSON.stringify({site:'shop',event:e,meta:m,path:location.pathname,ref:document.referrer,vid:v}))}catch(_){}}window.caelusTrack=t;t('page_view');})();</script>
 <script src="i18n.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+/* ===== 在线支付（追加：不改动既有商品卡片与价格） ===== */
+(function () {
+  // 部署支付服务后，把这里改成服务的公网地址，例如 https://xxx.example.com
+  var PAY_API = '__PAY_API_BASE__';
+  // 商品 id 对应支付服务 products.json 里的 id；价格由服务端决定，前端不传价
+  var PAY_PRODUCTS = [{ match: 'keychain.html', id: 'keychain' }];
+
+  // 未配置服务地址时不启用，站点保持原有行为
+  if (PAY_API.indexOf('__PAY_API_BASE__') !== -1) return;
+
+  var overlay = document.getElementById('payOverlay');
+  var qrEl = document.getElementById('payQr');
+  var amountEl = document.getElementById('payAmount');
+  var statusEl = document.getElementById('payStatus');
+  var orderEl = document.getElementById('payOrder');
+  var timer = null;
+
+  function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+  function stopPoll() { if (timer) { clearInterval(timer); timer = null; } }
+  function open() { overlay.hidden = false; }
+  function close() { overlay.hidden = true; stopPoll(); }
+
+  function fail(msg) {
+    statusEl.textContent = msg;
+    statusEl.className = 'pay-status err';
+    qrEl.hidden = true;
+  }
+
+  function draw(text) {
+    if (typeof QRCode === 'undefined') { fail('二维码组件加载失败，请检查网络'); return; }
+    QRCode.toCanvas(qrEl, text, { width: 220, margin: 1 }, function (err) {
+      if (err) fail('二维码生成失败');
+    });
+  }
+
+  function poll(orderId, expiresIn) {
+    var deadline = Date.now() + (expiresIn || 1800) * 1000;
+    stopPoll();
+    timer = setInterval(function () {
+      if (Date.now() > deadline) {
+        stopPoll();
+        statusEl.textContent = '二维码已过期，请重新下单';
+        statusEl.className = 'pay-status err';
+        return;
+      }
+      fetch(PAY_API + '/api/order/' + encodeURIComponent(orderId), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (o) {
+          if (o && o.status === 'paid') {
+            stopPoll();
+            statusEl.textContent = '支付成功，感谢购买！';
+            statusEl.className = 'pay-status ok';
+            qrEl.hidden = true;
+          }
+        })
+        .catch(function () {});
+    }, 2000);
+  }
+
+  function pay(productId) {
+    stopPoll();
+    open();
+    qrEl.hidden = false;
+    statusEl.className = 'pay-status';
+    statusEl.textContent = '正在生成支付二维码…';
+    amountEl.textContent = '';
+    orderEl.textContent = '';
+
+    fetch(PAY_API + '/api/order', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ productId: productId, qty: 1 })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) { fail(res.d && res.d.error ? res.d.error : '下单失败，请稍后重试'); return; }
+        amountEl.textContent = yuan(res.d.price);
+        orderEl.textContent = '订单号 ' + res.d.orderId;
+        statusEl.textContent = '等待支付…';
+        draw(res.d.qr);
+        poll(res.d.orderId, res.d.expiresIn);
+      })
+      .catch(function (e) { fail('网络错误：' + e.message); });
+  }
+
+  // 仅给配置了支付的商品注入购买按钮，既有卡片结构与价格保持原样
+  Array.prototype.forEach.call(document.querySelectorAll('.product-card'), function (card) {
+    var href = card.getAttribute('href') || '';
+    var hit = null;
+    for (var i = 0; i < PAY_PRODUCTS.length; i++) {
+      if (href.indexOf(PAY_PRODUCTS[i].match) !== -1) { hit = PAY_PRODUCTS[i]; break; }
+    }
+    var body = card.querySelector('.body');
+    if (!hit || !body) return;
+
+    var btn = document.createElement('span');
+    btn.className = 'pay-btn';
+    btn.setAttribute('role', 'button');
+    btn.setAttribute('tabindex', '0');
+    btn.textContent = '立即购买';
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      pay(hit.id);
+    });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pay(hit.id); }
+    });
+    body.appendChild(btn);
+  });
+
+  document.getElementById('payClose').addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
 </body>
 </html>
