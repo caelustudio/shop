@@ -529,6 +529,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .pay-order{margin:6px 0 0;font-size:.76rem;color:var(--text-muted);word-break:break-all}
 .pay-btn{position:relative;z-index:1;display:block;width:100%;margin-top:12px;text-align:center;background:var(--accent);color:#fff;font-size:.9rem;padding:.6rem 1rem;border-radius:10px;transition:filter .25s ease;pointer-events:auto}
 .pay-btn:hover{filter:brightness(1.1)}
+.pay-btn[hidden]{display:none}
+.pay-open{text-decoration:none}
 @media (prefers-reduced-motion:reduce){.pay-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
 <style>
@@ -759,7 +761,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     <h3 id="payTitle">扫码支付</h3>
     <p class="pay-amount" id="payAmount"></p>
     <div class="pay-qr"><canvas id="payQr"></canvas></div>
-    <p class="pay-tip">请使用 <strong>微信「扫一扫」</strong> 完成支付<span class="pay-muted">长按识别 / 相册识别无效</span></p>
+    <p class="pay-tip">请使用 <strong>支付宝「扫一扫」</strong> 完成支付<span class="pay-muted">手机端可直接唤起支付宝付款</span></p>
+    <a class="pay-btn pay-open" id="payOpenApp" href="#" rel="noopener" hidden>打开支付宝付款</a>
     <p class="pay-status" id="payStatus">正在生成支付二维码…</p>
     <p class="pay-order" id="payOrder"></p>
   </div>
@@ -828,6 +831,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     statusEl.textContent = msg;
     statusEl.className = 'pay-status err';
     qrEl.hidden = true;
+    var ob = document.getElementById('payOpenApp');
+    if (ob) ob.hidden = true;
   }
 
   function draw(text) {
@@ -869,6 +874,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     statusEl.textContent = '正在生成支付二维码…';
     amountEl.textContent = '';
     orderEl.textContent = '';
+    var openBtn = document.getElementById('payOpenApp');
+    if (openBtn) openBtn.hidden = true;
 
     fetch(PAY_API + '/api/order', {
       method: 'POST',
@@ -882,6 +889,11 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         orderEl.textContent = '订单号 ' + res.d.orderId;
         statusEl.textContent = '等待支付…';
         draw(res.d.qr);
+        // 支付宝返回的 qr 是 https://qr.alipay.com/... 链接，手机端用 alipays:// 可直接唤起 App
+        if (openBtn && res.d.qr) {
+          openBtn.href = 'alipays://platformapi/startapp?appId=20000067&url=' + encodeURIComponent(res.d.qr);
+          openBtn.hidden = !/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        }
         poll(res.d.orderId, res.d.expiresIn);
       })
       .catch(function (e) { fail('网络错误：' + e.message); });
