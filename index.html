@@ -793,7 +793,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 /* ===== 在线支付（追加：不改动既有商品卡片与价格） ===== */
 (function () {
   // 部署支付服务后，把这里改成服务的公网地址，例如 https://xxx.example.com
-  var PAY_API = '__PAY_API_BASE__';
+  var PAY_API = 'https://caelus-shop-pay.app.workbuddy.host';
   // 商品 id 对应支付服务 products.json 里的 id；价格由服务端决定，前端不传价
   var PAY_PRODUCTS = [{ match: 'keychain.html', id: 'keychain' }];
 
