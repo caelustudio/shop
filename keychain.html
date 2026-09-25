@@ -505,7 +505,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   <div class="kicker">订购</div>
   <h2 class="headline">填写收货信息。</h2>
   <div class="order-card reveal">
-    <form action="https://formsubmit.co/XyangOS@163.com" method="POST">
+    <form id="orderForm" novalidate>
       <input type="hidden" name="_subject" value="【钥匙扣订单】Caelus Studio 钥匙扣预订" />
       <input type="hidden" name="_template" value="table" />
       <input type="hidden" name="_captcha" value="false" />
@@ -538,22 +538,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
           <label>备注</label>
           <input type="text" name="备注" maxlength="100" placeholder="选填" />
         </div>
-        <button class="submit-btn" type="submit">提交订单</button>
-      <script>
-        (function () {
-          var form = document.querySelector('.order-card form');
-          form.addEventListener('submit', function (e) {
-            var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
-            var now = Date.now();
-            if (now - last < 60000) {
-              e.preventDefault();
-              alert('提交太频繁啦，请 1 分钟后再试。');
-              return;
-            }
-            localStorage.setItem('shop_last_submit', String(now));
-          });
-        })();
-      </script>
+        <button class="submit-btn" type="submit">去支付</button>
         <p class="form-note">我们将在 15 个工作日内联系你并发货。购买即代表你同意<a href="https://caelustudio.feishu.cn/wiki/space/7668877677914278860?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home" target="_blank" rel="noopener">《Caelus Studio 周边产品发放及购买协议》及相关协议和政策</a>。</p>
       </div>
     </form>
@@ -661,6 +646,148 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 <script>(function(){if(window.top!==window.self)return;var T='https://caelus-terminal.app.workbuddy.host/api/collect';function t(e,m){try{m=m||{};if(document.title&&!m.title)m.title=String(document.title).replace(/\s*[·|-]\s*Caelus Studio.*$/i,'').slice(0,60);var v=localStorage.getItem('caelus_vid');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('caelus_vid',v)}navigator.sendBeacon(T,JSON.stringify({site:'shop',event:e,meta:m,path:location.pathname,ref:document.referrer,vid:v}))}catch(_){}}window.caelusTrack=t;t('page_view');var f=document.querySelector('.order-card form');if(f)f.addEventListener('submit',function(){t('order_submit')},true);})();</script>
 <script src="i18n.js"></script>
 <!-- ===== 商店维护提示（追加） ===== -->
+<!-- ===== 支付弹窗（收款码 → 我已支付 → 感谢） ===== -->
+<style>
+  .pay-overlay{position:fixed;inset:0;z-index:2147483001;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .pay-overlay[hidden]{display:none}
+  .pay-modal{position:relative;margin:auto;width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;text-align:center;pointer-events:auto}
+  .pay-close{position:absolute;top:6px;right:8px;z-index:2;width:36px;height:36px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;pointer-events:auto}
+  .pay-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+  .pay-amount{margin:0;font-size:1.7rem;font-weight:700;color:var(--price-color)}
+  .pay-qr-grid{display:flex;gap:12px;justify-content:center;margin:16px 0 6px}
+  .pay-qr-item{flex:1;max-width:170px;border:1px solid var(--border-color);border-radius:14px;padding:12px 10px;background:var(--bg-card)}
+  .pay-qr-item img{width:140px;height:140px;display:block;margin:0 auto 8px;border-radius:10px;background:#fff;object-fit:contain}
+  .pay-qr-label{font-size:.82rem;font-weight:600;display:block}
+  .pay-qr-sub{display:block;font-size:.72rem;font-weight:300;color:var(--text-muted);margin-top:2px}
+  .pay-tip{margin:0 0 10px;font-size:.85rem;font-weight:300;color:var(--text-secondary);line-height:1.6}
+  .pay-muted{display:block;font-size:.76rem;color:var(--text-muted)}
+  .pay-btn{display:block;width:100%;margin-top:12px;text-align:center;background:var(--accent);color:#fff;font-size:.9rem;font-weight:400;padding:.65rem 1rem;border:0;border-radius:8px;cursor:pointer;transition:filter .2s ease;pointer-events:auto;font-family:inherit}
+  .pay-btn:hover{filter:brightness(1.08)}
+  .pay-btn[disabled]{opacity:.6;pointer-events:none}
+  .pay-err{margin:8px 0 0;font-size:.78rem;color:#ff6b6b;text-align:center;min-height:1em}
+  .pay-order{margin:6px 0 0;font-size:.76rem;color:var(--text-muted);word-break:break-all}
+  .pay-thanks-head{background:#e3f7ea;border-radius:16px;padding:24px 16px 18px;text-align:center;margin-bottom:14px}
+  .pay-check{width:52px;height:52px;display:block;margin:0 auto 10px}
+  .pay-thanks-head h4{margin:0;font-size:1.2rem;font-weight:700;color:#1e7f45}
+  .pay-thanks-desc{margin:0 0 6px;font-size:.86rem;font-weight:300;color:var(--text-secondary);line-height:1.7}
+  @media (prefers-color-scheme: dark){
+    .pay-thanks-head{background:#12351f}
+    .pay-thanks-head h4{color:#6fe39a}
+  }
+</style>
+<div class="pay-overlay" id="payOverlay" hidden>
+  <div class="pay-modal" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+    <button class="pay-close" id="payClose" aria-label="关闭">&times;</button>
+
+    <div id="payStepPay">
+      <h3 id="payTitle">扫码支付</h3>
+      <p class="pay-amount" id="payAmount"></p>
+      <div class="pay-qr-grid">
+        <div class="pay-qr-item">
+          <img src="/assets/pay-alipay.png" alt="支付宝收款码">
+          <span class="pay-qr-label">支付宝<span class="pay-qr-sub">Alipay</span></span>
+        </div>
+        <div class="pay-qr-item">
+          <img src="/assets/pay-wechat.png" alt="微信收款码">
+          <span class="pay-qr-label">微信支付<span class="pay-qr-sub">WeChat Pay</span></span>
+        </div>
+      </div>
+      <p class="pay-tip">转账时请在<strong>备注</strong>里填写你的称呼，便于核对<span class="pay-muted">付款完成后点击下方按钮</span></p>
+      <button class="pay-btn" id="payPaid" type="button">我已支付</button>
+      <p class="pay-err" id="payErr"></p>
+      <p class="pay-order">遇到问题？联系我们 hi@caelus.top</p>
+    </div>
+
+    <div id="payStepThanks" hidden>
+      <div class="pay-thanks-head">
+        <svg class="pay-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="#34c759"/><path d="M15 27l8 8 14-16" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>谢谢</h4>
+      </div>
+      <p class="pay-thanks-desc">我们将在 15 个工作日内核实，并按照你提供的联系方式与你联系。</p>
+      <button class="pay-btn" id="payDone" type="button">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== 订购支付流程：提交表单 → 扫码支付 → 我已支付 → 感谢 ===== */
+(function () {
+  var PRICE = 9.9;
+  var ORDER_API = 'https://caelus-terminal.app.workbuddy.host/api/order';
+
+  var form = document.getElementById('orderForm');
+  var overlay = document.getElementById('payOverlay');
+  if (!form || !overlay) return;
+  var stepPay = document.getElementById('payStepPay');
+  var stepThanks = document.getElementById('payStepThanks');
+  var amountEl = document.getElementById('payAmount');
+  var errEl = document.getElementById('payErr');
+  var paidBtn = document.getElementById('payPaid');
+  var stash = null;
+
+  function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+  function show(step) {
+    stepPay.hidden = step !== 'pay';
+    stepThanks.hidden = step !== 'thanks';
+  }
+  function openPay() { show('pay'); errEl.textContent = ''; overlay.hidden = false; }
+  function close() { overlay.hidden = true; }
+
+  document.getElementById('payClose').addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) close(); });
+  document.getElementById('payDone').addEventListener('click', close);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    // 原生必填校验
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    // 60 秒限频
+    var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
+    if (Date.now() - last < 60000) {
+      errEl.textContent = '';
+      alert('提交太频繁啦，请 1 分钟后再试。');
+      return;
+    }
+
+    var data = new FormData(form);
+    var qty = Math.min(Math.max(parseInt(data.get('数量'), 10) || 1, 1), 10);
+    stash = {
+      orderId: 'C' + Date.now().toString(36).toUpperCase(),
+      product: 'keychain',
+      productName: 'Caelus Studio 钥匙扣',
+      qty: qty,
+      amount: +(PRICE * qty).toFixed(2),
+      name: String(data.get('收件人') || '').slice(0, 40),
+      contact: [data.get('联系电话'), 'QQ:' + data.get('QQ号'), data.get('电子邮箱')].filter(Boolean).join(' / ').slice(0, 80),
+      address: String(data.get('收货地址') || '').slice(0, 200),
+      note: String(data.get('备注') || '').slice(0, 120),
+      paidVia: 'qrcode',
+      page: location.pathname
+    };
+    amountEl.textContent = yuan(stash.amount);
+    openPay();
+  });
+
+  paidBtn.addEventListener('click', function () {
+    if (!stash) return;
+    paidBtn.disabled = true;
+    localStorage.setItem('shop_last_submit', String(Date.now()));
+    fetch(ORDER_API, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(stash)
+    })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
+      .then(function () { show('thanks'); })
+      .catch(function () {
+        errEl.textContent = '提交失败，请检查网络后重试。';
+      })
+      .then(function () { paidBtn.disabled = false; });
+  });
+})();
+</script>
+
 <div class="maint-overlay" id="maintOverlay" hidden>
   <div class="maint-modal" role="dialog" aria-modal="true" aria-labelledby="maintTitle">
     <h3 id="maintTitle">商店维护中</h3>

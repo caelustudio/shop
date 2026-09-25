@@ -955,21 +955,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       .then(function () { btn.disabled = false; });
   });
 
-  // 不再注入「立即购买」按钮：点击整张商品卡片直接打开支付弹窗
-  Array.prototype.forEach.call(document.querySelectorAll('.product-card'), function (card) {
-    var href = card.getAttribute('href') || '';
-    var hit = null;
-    for (var i = 0; i < PRODUCTS.length; i++) {
-      if (href.indexOf(PRODUCTS[i].match) !== -1) { hit = PRODUCTS[i]; break; }
-    }
-    if (!hit) return;
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', function (e) {
-      e.preventDefault();
-      openPay(hit);
-    });
-  });
-})();
+  })();
 </script>
 <!-- ===== 商店维护提示（追加） ===== -->
 <div class="maint-overlay" id="maintOverlay" hidden>
