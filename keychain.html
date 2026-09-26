@@ -787,9 +787,30 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       clearInterval(timer);
       drawn = true;
       rolling = false;
-      lotteryText.textContent = Math.random() < 0.1
+      var win = Math.random() < 0.1;
+      lotteryText.textContent = win
         ? '🎉 恭喜！你抽中了隐藏款「烟花」！我们会随订单一起寄出。'
         : '很遗憾，这次与「烟花」擦肩而过，谢谢参与～';
+      if (win) {
+        // 中奖上报：复用订单接口推飞书，便于随单补发
+        fetch(ORDER_API, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            orderId: 'L' + stash.orderId,
+            product: 'lottery-win',
+            productName: '隐藏款「烟花」抽奖中奖（随单寄出）',
+            qty: 1,
+            amount: 0,
+            name: stash.name,
+            contact: stash.contact,
+            address: stash.address,
+            note: '抽奖中奖 · 原订单 ' + stash.orderId,
+            paidVia: 'lottery',
+            page: location.pathname
+          })
+        }).catch(function () {});
+      }
     }, 1800);
   });
 
