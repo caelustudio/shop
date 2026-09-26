@@ -500,6 +500,33 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   </div>
 </section>
 
+<!-- ===== 隐藏款 · 烟花 ===== -->
+<style>
+  .hidden-card{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;box-shadow:var(--shadow-card);padding:1.6rem}
+  .hidden-img{flex:1 1 320px;min-width:260px;border-radius:14px;overflow:hidden}
+  .hidden-img img{width:100%;display:block}
+  .hidden-info{flex:1 1 280px;display:flex;flex-direction:column;gap:.8rem}
+  .hidden-info h3{font-size:1.25rem;font-weight:600}
+  .hidden-info p{color:var(--text-secondary);font-weight:300;line-height:1.8;font-size:.95rem}
+  .pay-lottery{margin-top:4px}
+  .pay-lottery-text{margin:10px 0 0;font-size:.9rem;font-weight:600;color:#1f6fe0;min-height:1.3em;line-height:1.6}
+  @media (prefers-color-scheme: dark){
+    .pay-lottery-text{color:#7cb8ff}
+  }
+</style>
+<section class="section" id="hidden">
+  <div class="kicker">HIDDEN EDITION</div>
+  <h2 class="headline">隐藏款 · 烟花。</h2>
+  <div class="hidden-card reveal">
+    <div class="hidden-img"><img src="assets/keychain-hidden-banner.png" alt="隐藏款「烟花」钥匙扣" loading="lazy" /></div>
+    <div class="hidden-info">
+      <h3>🎆 隐藏款「烟花」</h3>
+      <p>每一枚钥匙扣都藏着一个小彩蛋：全新的「烟花」款以黑色亚克力为底，三簇彩色烟花环绕 C 形 Logo，只送不卖。</p>
+      <p>完成一笔订单即可参与一次文字抽奖，结果当场揭晓——抽中的话，「烟花」会随你的订单一起寄出。</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===== 订购表单 ===== -->
 <section class="section" id="order">
   <div class="kicker">订购</div>
@@ -704,6 +731,10 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         <h4>谢谢</h4>
       </div>
       <p class="pay-thanks-desc">我们将在 15 个工作日内核实，并按照你提供的联系方式与你联系。</p>
+      <div class="pay-lottery">
+        <button class="pay-btn" id="lotteryBtn" type="button">🎁 抽隐藏款 · 试手气</button>
+        <p class="pay-lottery-text" id="lotteryText"></p>
+      </div>
       <button class="pay-btn" id="payDone" type="button">关闭</button>
     </div>
   </div>
@@ -737,6 +768,30 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) close(); });
   document.getElementById('payDone').addEventListener('click', close);
+
+  // ===== 文字抽奖（隐藏款 · 烟花）：每单一次，10% 中奖 =====
+  var lotteryBtn = document.getElementById('lotteryBtn');
+  var lotteryText = document.getElementById('lotteryText');
+  var rolling = false, drawn = false;
+  lotteryBtn.addEventListener('click', function () {
+    if (rolling || drawn || !stash) return;
+    rolling = true;
+    lotteryBtn.disabled = true;
+    lotteryText.textContent = '';
+    var icons = ['🎆', '🎇', '✨', '🎊', '💫', '🔥'];
+    var n = 0;
+    var timer = setInterval(function () {
+      lotteryText.textContent = icons[n++ % icons.length] + ' · · ·';
+    }, 90);
+    setTimeout(function () {
+      clearInterval(timer);
+      drawn = true;
+      rolling = false;
+      lotteryText.textContent = Math.random() < 0.1
+        ? '🎉 恭喜！你抽中了隐藏款「烟花」！我们会随订单一起寄出。'
+        : '很遗憾，这次与「烟花」擦肩而过，谢谢参与～';
+    }, 1800);
+  });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -779,7 +834,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       body: JSON.stringify(stash)
     })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
-      .then(function () { show('thanks'); })
+      .then(function () { show('thanks'); drawn = false; lotteryText.textContent = ''; lotteryBtn.disabled = false; })
       .catch(function () {
         errEl.textContent = '提交失败，请检查网络后重试。';
       })
