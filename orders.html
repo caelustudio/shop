@@ -4,9 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.png" type="image/png">
-  <title>404 - Caelus Studio 商店</title>
+  <title>订单查询 - Caelus Studio 商店</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Caelus Studio" />
+  <meta property="og:title" content="订单查询 - Caelus Studio 商店" />
+  <meta property="og:description" content="凭订单号查看订单进度与隐藏款中奖状态。" />
+  <meta property="og:image" content="https://shop.caelus.top/assets/og-shop.png" />
+  <meta property="og:url" content="https://shop.caelus.top/orders.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="订单查询 - Caelus Studio 商店" />
+  <meta name="twitter:description" content="凭订单号查看订单进度与隐藏款中奖状态。" />
+  <meta name="twitter:image" content="https://shop.caelus.top/assets/og-shop.png" />
+
   <meta name="theme-color" content="#0b0b0b" />
-  <meta name="robots" content="noindex" />
+  <meta name="description" content="Caelus Studio 商店订单查询：凭订单号查看订单进度与隐藏款中奖状态。" />
   <script>
     (function() {
       var t = null;
@@ -429,38 +440,75 @@
     .reveal { opacity: 1; transform: none; }
   }
 </style>
-
-  /* ===== 404 ===== */
-  .nf-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;gap:.6rem}
-  .nf-code{font-size:clamp(5rem,18vw,9rem);font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--accent);opacity:.9}
-  .nf-code span{display:inline-block;animation:nf-bob 2.4s ease-in-out infinite}
-  .nf-code span:nth-child(2){animation-delay:.2s}
-  .nf-code span:nth-child(3){animation-delay:.4s}
-  @keyframes nf-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-  .nf-title{font-size:1.3rem;font-weight:600;margin-top:.6rem}
-  .nf-desc{font-size:.9rem;font-weight:300;color:var(--text-secondary);line-height:1.7}
-  .nf-actions{margin-top:1.6rem;display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center}
-  .nf-btn{font:inherit;font-size:.92rem;font-weight:400;padding:.65rem 1.4rem;border-radius:10px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:filter .2s ease, border-color .2s ease}
-  .nf-btn:hover{filter:brightness(1.15);border-color:var(--accent)}
-  .nf-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  /* ===== 订单查询页 ===== */
+  .query-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;box-shadow:var(--shadow-card);padding:2rem;max-width:560px;margin:0 auto}
+  .q-row{display:flex;gap:.8rem}
+  .q-row input{flex:1;font:inherit;font-size:1rem;padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border-color);background:var(--bg-primary);color:inherit;letter-spacing:.03em}
+  .q-row input:focus{outline:none;border-color:var(--accent)}
+  .q-btn{font:inherit;font-size:.95rem;font-weight:500;padding:.7rem 1.4rem;border:0;border-radius:10px;background:var(--accent);color:#fff;cursor:pointer;transition:filter .2s ease}
+  .q-btn:hover{filter:brightness(1.1)}
+  .q-btn[disabled]{opacity:.6;pointer-events:none}
+  .q-err{margin:.8rem 0 0;font-size:.82rem;color:#ff6b6b;min-height:1.2em;text-align:center}
+  .q-result{margin-top:1.4rem;border-top:1px solid var(--border-color);padding-top:1.4rem;text-align:left}
+  .q-status{display:flex;align-items:center;gap:.5rem;font-size:.9rem;font-weight:500;color:#1e7f45}
+  [data-theme="dark"] .q-status{color:#6fe39a}
+  .q-dot{width:9px;height:9px;border-radius:50%;background:#34c759;box-shadow:0 0 0 4px rgba(52,199,89,.18);animation:pulse 1.6s ease infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 7px rgba(52,199,89,.08)}}
+  .q-result h3{margin:.7rem 0 .3rem;font-size:1.15rem;font-weight:600}
+  .q-meta{font-size:.85rem;font-weight:300;color:var(--text-secondary)}
+  .q-lottery{margin:.8rem 0 0;font-size:.88rem;font-weight:600;color:#1f6fe0}
+  [data-theme="dark"] .q-lottery{color:#7cb8ff}
+  .q-tip{margin:.8rem 0 0;font-size:.8rem;font-weight:300;color:var(--text-muted);line-height:1.7}
+  .q-hint{margin-top:1.4rem;font-size:.8rem;font-weight:300;color:var(--text-muted);text-align:center}
 </style>
 </head>
 <body>
-<div style="position:fixed;top:16px;right:20px;z-index:200;display:flex;gap:10px"><button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式">
+
+<!-- ===== 导航栏 ===== -->
+<nav class="site-nav" id="siteNav">
+  <a class="nav-brand" href="https://www.caelus.top/" target="_blank">Caelus Studio</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="./">商店</a></li>
+      <li><a href="keychain.html">钥匙扣</a></li>
+      <li><a href="orders.html">订单查询</a></li>
+      <li><a href="https://www.caelus.top/nav/" target="_blank">导航</a></li>
+    </ul>
+    <button class="pay-btn" id="payDone" type="button">关闭</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式">
       <svg id="themeIcon" viewBox="0 0 24 24">
         <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41-.39.39-1.03.39-1.41 0l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
       </svg>
-    </button></div>
-<div class="nf-wrap">
-  <div class="nf-code"><span>4</span><span>0</span><span>4</span></div>
-  <p class="nf-title">页面走丢了。</p>
-  <p class="nf-desc">你要找的页面不存在，或者已经被移动到别处。</p>
-  <div class="nf-actions">
-    <a class="nf-btn primary" href="/">返回商店</a>
-    <a class="nf-btn" href="/keychain.html">看看钥匙扣</a>
-    <a class="nf-btn" href="/orders.html">查询订单</a>
+    </button>
   </div>
-</div>
+</nav>
+
+<!-- ===== 订单查询 ===== -->
+<section class="section" id="query" style="padding-top:130px">
+  <div class="kicker">ORDER LOOKUP</div>
+  <h1 class="headline">查询订单进度。</h1>
+  <div class="query-card">
+    <div class="q-row">
+      <input id="orderId" placeholder="输入订单号，如 CXXXXXX" maxlength="32" autocomplete="off">
+      <button id="qBtn" class="q-btn" type="button">查询</button>
+    </div>
+    <p class="q-err" id="qErr"></p>
+    <div class="q-result" id="qResult" hidden>
+      <div class="q-status"><span class="q-dot"></span><span>订单已收到，核实后将按你提供的联系方式与你联系</span></div>
+      <h3 id="rProduct"></h3>
+      <p class="q-meta" id="rMeta"></p>
+      <p class="q-lottery" id="rLottery" hidden>🎉 含隐藏款「烟花」，将随本订单一起寄出！</p>
+      <p class="q-tip">为保护隐私，此页不显示收货地址与联系方式，发货前我们会与你确认。</p>
+    </div>
+  </div>
+  <p class="q-hint">订单号在支付完成后的订单提交环节生成；如有疑问请联系 hi@caelus.top</p>
+</section>
+
+<footer class="site-footer">
+  <p>©️ 2026 Caelus Studio.</p>
+  <p class="highlight">网页由人工智能辅助生成</p>
+</footer>
+
 <div class="custom-cursor" id="customCursor"></div>
 <script>
   // ===== 自定义圆形光标 =====
@@ -512,6 +560,54 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+})();
+</script>
+<script>
+/* ===== 订单查询 ===== */
+(function () {
+  var API = 'https://caelus-terminal.app.workbuddy.host/api/order';
+  var input = document.getElementById('orderId');
+  var btn = document.getElementById('qBtn');
+  var errEl = document.getElementById('qErr');
+  var box = document.getElementById('qResult');
+  var rProduct = document.getElementById('rProduct');
+  var rMeta = document.getElementById('rMeta');
+  var rLottery = document.getElementById('rLottery');
+
+  function fmtTs(ts) {
+    if (!ts) return '';
+    var d = new Date(ts);
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  function query() {
+    var id = input.value.trim();
+    errEl.textContent = '';
+    box.hidden = true;
+    if (!id) { errEl.textContent = '请输入订单号。'; return; }
+    btn.disabled = true;
+    fetch(API + '?id=' + encodeURIComponent(id))
+      .then(function (r) { if (!r.ok) throw new Error(r.status === 404 ? 'notfound' : 'http'); return r.json(); })
+      .then(function (d) {
+        var o = d.order || {};
+        rProduct.textContent = o.productName || 'Caelus Studio 商品';
+        rMeta.textContent = '\u00d7' + (o.qty || 1) + ' · \u00a5' + Number(o.amount || 0).toFixed(2) + (o.ts ? ' · ' + fmtTs(o.ts) : '');
+        rLottery.hidden = !o.isLottery;
+        box.hidden = false;
+      })
+      .catch(function (e) {
+        errEl.textContent = e.message === 'notfound' ? '未找到该订单，请核对订单号后重试。' : '查询失败，请检查网络后重试。';
+      })
+      .then(function () { btn.disabled = false; });
+  }
+
+  btn.addEventListener('click', query);
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') query(); });
+
+  // 支持 ?id= 直达
+  var q = new URLSearchParams(location.search).get('id');
+  if (q) { input.value = q; query(); }
 })();
 </script>
 <script src="i18n.js"></script>

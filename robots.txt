@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://shop.caelus.top/sitemap.xml

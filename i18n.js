@@ -93,6 +93,22 @@
     '🎁 抽隐藏款 · 试手气': ['🎁 抽隐藏款 · 试手气', '🎁 抽隱藏款 · 試手氣', '🎁 Try your luck'],
     '🎉 恭喜！你抽中了隐藏款「烟花」！我们会随订单一起寄出。': ['🎉 恭喜！你抽中了隐藏款「烟花」！我们会随订单一起寄出。', '🎉 恭喜！你抽中了隱藏款「煙花」！我們會隨訂單一起寄出。', '🎉 Congratulations! You won the hidden Fireworks edition! It will ship with your order.'],
     '很遗憾，这次与「烟花」擦肩而过，谢谢参与～': ['很遗憾，这次与「烟花」擦肩而过，谢谢参与～', '很遺憾，這次與「煙花」擦肩而過，謝謝參與～', 'So close! No luck this time — thanks for playing.'],
+    '订单查询': ['订单查询', '訂單查詢', 'Orders'],
+    '查询订单进度。': ['查询订单进度。', '查詢訂單進度。', 'Track your order.'],
+    '输入订单号，如 CXXXXXX': ['输入订单号，如 CXXXXXX', '輸入訂單號，如 CXXXXXX', 'Order ID, e.g. CXXXXXX'],
+    '查询': ['查询', '查詢', 'Search'],
+    '订单已收到，核实后将按你提供的联系方式与你联系': ['订单已收到，核实后将按你提供的联系方式与你联系', '訂單已收到，核實後將按你提供的聯絡方式與你聯絡', 'Order received — we will contact you via the details you provided'],
+    '🎉 含隐藏款「烟花」，将随本订单一起寄出！': ['🎉 含隐藏款「烟花」，将随本订单一起寄出！', '🎉 含隱藏款「煙花」，將隨本訂單一起寄出！', '🎉 Includes the hidden Fireworks edition — ships with this order!'],
+    '为保护隐私，此页不显示收货地址与联系方式，发货前我们会与你确认。': ['为保护隐私，此页不显示收货地址与联系方式，发货前我们会与你确认。', '為保護隱私，此頁不顯示收貨地址與聯絡方式，發貨前我們會與你確認。', 'For privacy, this page never shows your address or contact — we confirm before shipping.'],
+    '订单号在支付完成后的订单提交环节生成；如有疑问请联系 hi@caelus.top': ['订单号在支付完成后的订单提交环节生成；如有疑问请联系 hi@caelus.top', '訂單號在支付完成後的訂單提交環節生成；如有疑問請聯絡 hi@caelus.top', 'Your order ID is generated when the order is submitted. Questions? hi@caelus.top'],
+    '请输入订单号。': ['请输入订单号。', '請輸入訂單號。', 'Please enter an order ID.'],
+    '未找到该订单，请核对订单号后重试。': ['未找到该订单，请核对订单号后重试。', '未找到該訂單，請核對訂單號後重試。', 'Order not found — please double-check the ID.'],
+    '查询失败，请检查网络后重试。': ['查询失败，请检查网络后重试。', '查詢失敗，請檢查網絡後重試。', 'Lookup failed — please check your network.'],
+    '页面走丢了。': ['页面走丢了。', '頁面走丟了。', 'This page wandered off.'],
+    '你要找的页面不存在，或者已经被移动到别处。': ['你要找的页面不存在，或者已经被移动到别处。', '你要找的頁面不存在，或者已經被移動到別處。', 'The page you are looking for does not exist or has moved.'],
+    '返回商店': ['返回商店', '返回商店', 'Back to shop'],
+    '看看钥匙扣': ['看看钥匙扣', '看看鑰匙扣', 'View keychain'],
+    '查询订单': ['查询订单', '查詢訂單', 'Track order'],
   };
 
   var LABEL = { 'zh-CN': '简', 'zh-TW': '繁', 'en': 'EN' };
