@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="Gzc1k9nfZX6TMoWdZSHCQ6hMluA8CfacZr03ynytZ70" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <title>9.9 元优惠券 - Caelus Studio 商店</title>
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta name="description" content="Caelus Studio 官方优惠券现已开售，￥9.9/个。填写收货信息即可预订，把 Caelus Studio 挂在钥匙串上。" />
+  <script>
+    (function() {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0b0b0b;
+    --bg-card: #111;
+    --text-primary: #f0f0f0;
+    --text-secondary: #d0d0d0;
+    --text-muted: #888;
+    --border-color: rgba(255,255,255,0.06);
+    --shadow-card: 0 4px 16px rgba(0,0,0,0.3);
+    --accent: #0a84ff;
+    --accent-soft: rgba(10,132,255,0.12);
+    --price-color: #0a84ff;
+    --footer-color: #555;
+    --footer-highlight: #666;
+  }
+
+  [data-theme="light"] {
+    --bg-primary: #f5f5f5;
+    --bg-card: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #2a2a2a;
+    --text-muted: #555;
+    --border-color: rgba(0,0,0,0.08);
+    --shadow-card: 0 4px 16px rgba(0,0,0,0.06);
+    --accent: #0a84ff;
+    --accent-soft: rgba(10,132,255,0.10);
+    --price-color: #0a84ff;
+    --footer-color: #999;
+    --footer-highlight: #aaa;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  /* ===== 导航栏 ===== */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: transparent;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  .site-nav.scrolled {
+    background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+    border-bottom-color: var(--border-color);
+  }
+
+  .nav-brand {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.01em;
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 1.6rem; }
+  .nav-links { display: flex; gap: 1.6rem; }
+
+  .nav-links a {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--text-primary); }
+
+  .theme-toggle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--accent-soft);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .theme-toggle:hover { transform: scale(1.06); }
+  .theme-toggle svg { width: 19px; height: 19px; fill: currentColor; }
+
+  /* ===== 返回链接 ===== */
+  .back-link {
+    display: inline-block;
+    margin: 0 0 1.6rem;
+    font-size: 0.88rem;
+    color: var(--accent);
+  }
+
+  .back-link:hover { text-decoration: underline; }
+
+  /* ===== 商品详情 ===== */
+  .detail {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 7.5rem 2rem 0;
+  }
+
+  .detail-head {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 4.5rem;
+  }
+
+  .detail-img {
+    flex: 1 1 320px;
+    aspect-ratio: 5 / 3;
+    border-radius: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .detail-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .detail-info {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .detail-info h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .detail-info .desc {
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .detail-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .price-now {
+    font-size: clamp(2.6rem, 6vw, 3.6rem);
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .price-unit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-self: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--price-color);
+  }
+
+  .feature-list li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 2;
+  }
+
+  .feature-list li::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    transform: translateY(-2px);
+  }
+
+  /* ===== 订购表单 ===== */
+  .section {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .kicker {
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.7rem;
+  }
+
+  .headline {
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 2.4rem;
+  }
+
+  .order-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 2.6rem;
+    max-width: 640px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-card);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .field label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+  }
+
+  .field label b { color: var(--accent); font-weight: 500; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.75rem 0.95rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .field textarea { resize: vertical; min-height: 5.2rem; }
+
+  .submit-btn {
+    grid-column: 1 / -1;
+    margin-top: 0.4rem;
+    padding: 0.95rem;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 1.02rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
+  }
+
+  .submit-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  .form-note {
+    grid-column: 1 / -1;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .form-note a { color: #0071e3; text-decoration: none; }
+  .form-note a:hover { text-decoration: underline; }
+
+  /* ===== 页脚 ===== */
+  .footer-links {
+    max-width: 1060px;
+    margin: 4.5rem auto 0;
+    padding: 2rem 2rem 0;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+  }
+
+  .footer-links .link-group { flex: 1; min-width: 130px; }
+
+  .footer-links h2 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+  }
+
+  .footer-links li { margin-bottom: 0.45rem; }
+
+  .footer-links a {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover { color: var(--text-primary); }
+
+  .site-footer {
+    text-align: center;
+    padding: 3rem 2rem 3.5rem;
+    color: var(--footer-color);
+    font-size: 0.82rem;
+  }
+
+  .site-footer .highlight { color: var(--footer-highlight); margin-top: 0.3rem; }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 760px) {
+    .site-nav { padding: 0 1.3rem; }
+    .nav-links { display: none; }
+    .detail { padding: 6.5rem 1.3rem 0; }
+    .section { padding: 0 1.3rem; }
+    .detail-head { gap: 1.8rem; }
+    .order-card { padding: 1.6rem; }
+    .form-grid { grid-template-columns: 1fr; }
+    .footer-links { gap: 2rem; padding: 2rem 1.3rem 0; }
+  }
+
+  /* ===== 自定义圆形光标（与主站一致） ===== */
+  body { cursor: none; }
+  a, button, input, textarea, select, label { cursor: none !important; }
+  .custom-cursor {
+    position: fixed;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    z-index: 2147483600;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    will-change: transform;
+  }
+  [data-theme="light"] .custom-cursor {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.03);
+  }
+  .custom-cursor.clicked {
+    width: 8px; height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+  [data-theme="light"] .custom-cursor.clicked {
+    background: rgba(0, 0, 0, 0.15);
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+  .custom-cursor.hover {
+    width: 28px; height: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  [data-theme="light"] .custom-cursor.hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  @media (pointer: coarse) {
+    .custom-cursor { display: none !important; }
+    body { cursor: auto; }
+    a, button, input, textarea, select, label { cursor: auto !important; }
+  }
+
+  /* ===== 滚动触发入场动画（与主站一致） ===== */
+  .reveal { opacity: 0; }
+  .reveal.reveal-visible {
+    animation: heroFadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--reveal-delay, 0s);
+  }
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Caelus Studio" />
+  <meta property="og:title" content="9.9 元优惠券" />
+  <meta property="og:description" content="Caelus Studio 官方优惠券现已开售，￥9.9/个。填写收货信息即可预订，把 Caelus Studio 挂在钥匙串上。" />
+  <meta property="og:url" content="https://shop.caelus.top/coupon.html" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:image" content="https://shop.caelus.top/assets/coupon-og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://shop.caelus.top/coupon.html" /><link rel="stylesheet" href="https://www.caelus.top/fonts/opposans40/result.css">
+<style>
+/* Caelus Studio 统一字体 OPPO Sans 4.0：标题 medium(500) 正文 regular(400) */
+html,body{font-family:'OPPO Sans 4.0','PingFang SC','Microsoft YaHei',system-ui,sans-serif;font-weight:400}
+h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentColor}
+</style>
+
+<style>
+/* ===== 商店维护提示（追加，不改动既有样式） ===== */
+.maint-overlay{position:fixed;inset:0;z-index:2147483000;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.maint-overlay[hidden]{display:none}
+/* 站点自定义光标需高于提示层，否则提示内看不到鼠标 */
+.custom-cursor{z-index:2147483600}
+.maint-modal{position:relative;margin:auto;width:100%;max-width:320px;background:var(--bg-card,#111);border:1px solid var(--border-color,rgba(255,255,255,.1));border-radius:18px;box-shadow:var(--shadow-card,0 4px 16px rgba(0,0,0,.3));padding:26px 22px;text-align:center;pointer-events:auto}
+.maint-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:.6rem;color:var(--text-primary,#f0f0f0)}
+.maint-modal p{margin:0;font-size:.88rem;font-weight:300;color:var(--text-secondary,#d0d0d0);line-height:1.75}
+@media (prefers-reduced-motion:reduce){.maint-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
+<style>
+/* ===== 账号面板 ===== */
+.auth-overlay{position:fixed;inset:0;z-index:2147483002;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.auth-overlay[hidden]{display:none}
+.auth-modal{position:relative;margin:auto;width:100%;max-width:420px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;pointer-events:auto}
+.auth-close{position:absolute;top:6px;right:8px;z-index:2;width:36px;height:36px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;pointer-events:auto;cursor:pointer}
+.auth-tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:1px solid var(--border-color)}
+.auth-tab{flex:1;padding:.55rem 0;border:0;background:transparent;color:var(--text-secondary);font-size:.92rem;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s}
+.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.auth-tab:hover{color:var(--text-primary)}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;margin-bottom:5px;font-size:.85rem;color:var(--text-secondary)}
+.auth-field input{width:100%;box-sizing:border-box;padding:.55rem .75rem;border:1px solid var(--border-color);border-radius:10px;background:var(--bg-page);color:var(--text-primary);font-family:inherit;font-size:.9rem}
+.auth-field input:focus{outline:none;border-color:var(--accent)}
+.auth-code-row{display:flex;gap:10px}
+.auth-code-row input{flex:1}
+.auth-code-row button{white-space:nowrap;padding:0 14px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:10px;font-family:inherit;font-size:.85rem;cursor:pointer}
+.auth-code-row button:disabled{opacity:.5;cursor:not-allowed}
+.auth-btn{display:block;width:100%;margin-top:8px;text-align:center;background:var(--accent);color:#fff;font-size:.95rem;padding:.65rem 1rem;border:0;border-radius:10px;cursor:pointer;transition:filter .2s;font-family:inherit}
+.auth-btn:hover{filter:brightness(1.08)}
+.auth-btn[disabled]{opacity:.6;cursor:not-allowed}
+.auth-err{margin:8px 0 0;font-size:.78rem;color:#ff6b6b;text-align:center;min-height:1.2em}
+.auth-ok{margin:8px 0 0;font-size:.78rem;color:#30d158;text-align:center;min-height:1.2em}
+.auth-hint{margin-top:14px;font-size:.8rem;color:var(--text-muted);line-height:1.7}
+.auth-section h4{margin:0 0 14px;font-size:1.1rem;font-weight:600;color:var(--text-primary)}
+.auth-profile{display:grid;gap:14px}
+.auth-profile .auth-field{margin:0}
+.auth-email-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.9rem;color:var(--text-secondary)}
+.auth-email-row strong{color:var(--text-primary)}
+.auth-logout{padding:.45rem 12px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);border-radius:8px;font-family:inherit;font-size:.85rem;cursor:pointer}
+.auth-logout:hover{color:var(--text-primary)}
+.password-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--border-color)}
+.nav-account{font-size:.9rem;color:var(--text-secondary);text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .2s}
+.nav-account:hover{background:var(--bg-card)}
+@media (prefers-reduced-motion:reduce){.auth-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
+<style>
+/* ===== 优惠券购买区 ===== */
+.buy-card{text-align:center;padding:10px 0}
+.buy-price{font-size:1.1rem;color:var(--text-secondary);margin:0 0 8px}
+.buy-price strong{font-size:1.8rem;color:var(--price-color);font-weight:700}
+.buy-tip{font-size:.85rem;color:var(--text-muted);margin:0 0 18px}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航栏 ===== -->
+<nav class="site-nav" id="siteNav">
+  <a class="nav-brand" href="https://www.caelus.top/" target="_blank">Caelus Studio</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="./">商店</a></li>
+      <li><a href="orders.html">订单查询</a></li>
+      <li><a href="#buy">立即购买</a></li><li><a href="#" id="navAccount">我的</a></li>
+      <li><a href="https://www.caelus.top/nav/" target="_blank">导航</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式">
+      <svg id="themeIcon" viewBox="0 0 24 24">
+        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41-.39.39-1.03.39-1.41 0l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== 商品详情 ===== -->
+<section class="detail reveal">
+  <a class="back-link" href="./">← 返回商店</a>
+  <div class="detail-head">
+    <div class="detail-img">
+      <img src="assets/keychain-banner.png" alt="9.9 元优惠券：￥9.9/个" loading="lazy" />
+    </div>
+    <div class="detail-info">
+      <h1>9.9 元优惠券</h1>
+      <div class="detail-price">
+        <span class="price-now">￥9.9</span>
+        <span class="price-unit"><span>元</span><span>/个</span></span>
+      </div>
+      <p class="desc">Caelus Studio 官方优惠券，透明亚克力精工切割，适合挂在钥匙串、书包或工作包上。</p>
+      <ul class="feature-list">
+        <li>￥9.9/个</li>
+        <li>填写收货信息即可预订，发货前另行确认</li>
+        <li>数量有限，先到先得</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 订购表单 ===== -->
+<!-- ===== 购买 ===== -->
+<section class="section" id="buy">
+  <div class="kicker">购买</div>
+  <h2 class="headline">登录账户，一键购买。</h2>
+  <div class="order-card reveal">
+    <div class="buy-card">
+      <p class="buy-price">实付金额：<strong>￥9.9</strong></p>
+      <p class="buy-tip">优惠券将自动发放至你的账户，下单时抵扣。</p>
+      <button class="submit-btn" id="buyBtn" type="button">立即购买</button>
+      <p class="form-note">购买即代表你同意<a href="https://caelustudio.feishu.cn/wiki/space/7668877677914278860?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home" target="_blank" rel="noopener">《Caelus Studio 周边产品发放及购买协议》及相关协议和政策</a>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<div class="footer-links reveal">
+  <div class="link-group">
+    <h2>本站</h2>
+    <ul>
+      <li><a href="./">返回商店</a></li>
+      <li><a href="#buy">立即购买</a></li><li><a href="#" id="navAccount">我的</a></li>
+    </ul>
+  </div>
+  <div class="link-group">
+    <h2>联系</h2>
+    <ul>
+      <li><a href="mailto:hi@caelus.top">hi@caelus.top</a></li>
+      <li><a href="https://github.com/caelustudio" target="_blank">GitHub</a></li>
+    </ul>
+  </div>
+  <div class="link-group">
+    <h2>主站</h2>
+    <ul>
+      <li><a href="https://www.caelus.top/" target="_blank">Caelus Studio 首页</a></li>
+      <li><a href="https://www.caelus.top/nav/" target="_blank">导航</a></li>
+    </ul>
+  </div>
+</div>
+
+<footer class="site-footer reveal">
+  <p>©️ 2026 Caelus Studio.</p>
+  <p class="highlight">网页由人工智能辅助生成</p>
+</footer>
+
+<script>
+/* ===== 主题切换 ===== */
+(function() {
+  var btn = document.getElementById('themeToggle');
+  var icon = document.getElementById('themeIcon');
+  var html = document.documentElement;
+
+  function render(theme) {
+    if (theme === 'light') {
+      icon.innerHTML = '<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41-.39.39-1.03.39-1.41 0l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';
+    } else {
+      icon.innerHTML = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
+    }
+  }
+
+  btn.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    render(next);
+  });
+  render(html.getAttribute('data-theme'));
+})();
+
+/* ===== 导航栏滚动状态 ===== */
+(function() {
+  var nav = document.getElementById('siteNav');
+  function onScroll() {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+<div class="custom-cursor" id="customCursor"></div>
+<script>
+  // ===== 自定义圆形光标 =====
+  (function () {
+    var cursor = document.getElementById('customCursor');
+    document.addEventListener('mousemove', function (e) {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mousedown', function () { cursor.classList.add('clicked'); });
+    document.addEventListener('mouseup', function () { cursor.classList.remove('clicked'); });
+    document.addEventListener('mouseleave', function () { cursor.style.display = 'none'; });
+    document.addEventListener('mouseenter', function () { cursor.style.display = 'block'; });
+    document.querySelectorAll('a, button, input, textarea, select, label').forEach(function (el) {
+      el.addEventListener('mouseenter', function () { cursor.classList.add('hover'); });
+      el.addEventListener('mouseleave', function () { cursor.classList.remove('hover'); });
+    });
+  })();
+
+  // ===== 滚动触发入场动画 =====
+  (function () {
+    var revealEls = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach(function (el) { observer.observe(el); });
+  })();
+</script>
+<script>(function(){if(window.top!==window.self)return;var T='https://caelus-terminal.app.workbuddy.host/api/collect';function t(e,m){try{m=m||{};if(document.title&&!m.title)m.title=String(document.title).replace(/\s*[·|-]\s*Caelus Studio.*$/i,'').slice(0,60);var v=localStorage.getItem('caelus_vid');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('caelus_vid',v)}navigator.sendBeacon(T,JSON.stringify({site:'shop',event:e,meta:m,path:location.pathname,ref:document.referrer,vid:v}))}catch(_){}}window.caelusTrack=t;t('page_view');var f=document.querySelector('.order-card form');if(f)f.addEventListener('submit',function(){t('order_submit')},true);})();</script>
+<script src="i18n.js"></script>
+<!-- ===== 商店维护提示（追加） ===== -->
+<!-- ===== 支付弹窗（收款码 → 我已支付 → 感谢） ===== -->
+<style>
+  .pay-overlay{position:fixed;inset:0;z-index:2147483001;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .pay-overlay[hidden]{display:none}
+  .pay-modal{position:relative;margin:auto;width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;text-align:center;pointer-events:auto}
+  .pay-close{position:absolute;top:6px;right:8px;z-index:2;width:36px;height:36px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;pointer-events:auto}
+  .pay-modal h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+  .pay-amount{margin:0;font-size:1.7rem;font-weight:700;color:var(--price-color)}
+  .pay-qr-grid{display:flex;gap:12px;justify-content:center;margin:16px 0 6px}
+  .pay-qr-item{flex:1;max-width:170px;border:1px solid var(--border-color);border-radius:14px;padding:12px 10px;background:var(--bg-card)}
+  .pay-qr-item img{width:140px;height:140px;display:block;margin:0 auto 8px;border-radius:10px;background:#fff;object-fit:contain}
+  .pay-qr-label{font-size:.82rem;font-weight:600;display:block}
+  .pay-qr-sub{display:block;font-size:.72rem;font-weight:300;color:var(--text-muted);margin-top:2px}
+  .pay-tip{margin:0 0 10px;font-size:.85rem;font-weight:300;color:var(--text-secondary);line-height:1.6}
+  .pay-muted{display:block;font-size:.76rem;color:var(--text-muted)}
+  .pay-btn{display:block;width:100%;margin-top:12px;text-align:center;background:var(--accent);color:#fff;font-size:.9rem;font-weight:400;padding:.65rem 1rem;border:0;border-radius:8px;cursor:pointer;transition:filter .2s ease;pointer-events:auto;font-family:inherit}
+  .pay-btn:hover{filter:brightness(1.08)}
+  .pay-btn[disabled]{opacity:.6;pointer-events:none}
+  .pay-err{margin:8px 0 0;font-size:.78rem;color:#ff6b6b;text-align:center;min-height:1em}
+  .pay-order{margin:6px 0 0;font-size:.76rem;color:var(--text-muted);word-break:break-all}
+  .pay-thanks-head{background:#e3f7ea;border-radius:16px;padding:24px 16px 18px;text-align:center;margin-bottom:14px}
+  .pay-check{width:52px;height:52px;display:block;margin:0 auto 10px}
+  .pay-thanks-head h4{margin:0;font-size:1.2rem;font-weight:700;color:#1e7f45}
+  .pay-thanks-desc{margin:0 0 6px;font-size:.86rem;font-weight:300;color:var(--text-secondary);line-height:1.7}
+  @media (prefers-color-scheme: dark){
+    .pay-thanks-head{background:#12351f}
+    .pay-thanks-head h4{color:#6fe39a}
+  }
+</style>
+<div class="pay-overlay" id="payOverlay" hidden>
+  <div class="pay-modal" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+    <button class="pay-close" id="payClose" aria-label="关闭">&times;</button>
+
+    <div id="payStepPay">
+      <h3 id="payTitle">扫码支付</h3>
+      <p class="pay-amount" id="payAmount"></p>
+      <div class="pay-qr-grid">
+        <div class="pay-qr-item">
+          <img src="/assets/pay-alipay.png" alt="支付宝收款码">
+          <span class="pay-qr-label">支付宝<span class="pay-qr-sub">Alipay</span></span>
+        </div>
+        <div class="pay-qr-item">
+          <img src="/assets/pay-wechat.png" alt="微信收款码">
+          <span class="pay-qr-label">微信支付<span class="pay-qr-sub">WeChat Pay</span></span>
+        </div>
+      </div>
+      <p class="pay-tip">转账时请在<strong>备注</strong>里填写你的称呼，便于核对<span class="pay-muted">付款完成后点击下方按钮</span></p>
+      <button class="pay-btn" id="payPaid" type="button">我已支付</button>
+      <p class="pay-err" id="payErr"></p>
+      <p class="pay-order">遇到问题？联系我们 hi@caelus.top</p>
+    </div>
+
+    <div id="payStepThanks" hidden>
+      <div class="pay-thanks-head">
+        <svg class="pay-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="#34c759"/><path d="M15 27l8 8 14-16" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>谢谢</h4>
+      </div>
+      <p class="pay-thanks-desc">支付信息已收到，优惠券将在核实后发放至你的账户。</p>
+      <button class="pay-btn" id="payDone" type="button">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 账号面板弹窗 ===== -->
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="auth-close" id="authClose" aria-label="关闭">&times;</button>
+
+    <!-- 未登录 -->
+    <div id="authGuest">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-tab="login" type="button">登录</button>
+        <button class="auth-tab" data-auth-tab="register" type="button">注册</button>
+      </div>
+
+      <div id="authLoginPanel">
+        <div class="auth-field"><label>电子邮箱</label><input type="email" id="loginEmail" placeholder="you@example.com" /></div>
+        <div class="auth-field"><label>密码</label><input type="password" id="loginPassword" placeholder="密码" /></div>
+        <button class="auth-btn" id="loginBtn" type="button">登录</button>
+        <p class="auth-err" id="loginErr"></p>
+      </div>
+
+      <div id="authRegisterPanel" hidden>
+        <div class="auth-field"><label>电子邮箱</label><input type="email" id="regEmail" placeholder="you@example.com" /></div>
+        <div class="auth-field"><label>昵称</label><input type="text" id="regNickname" maxlength="20" placeholder="怎么称呼你" /></div>
+        <div class="auth-field">
+          <label>验证码</label>
+          <div class="auth-code-row"><input type="text" id="regCode" maxlength="6" inputmode="numeric" placeholder="6 位验证码" /><button id="regSendCode" type="button">获取验证码</button></div>
+        </div>
+        <div class="auth-field"><label>密码</label><input type="password" id="regPassword" placeholder="6-64 位密码" /></div>
+        <div class="auth-field"><label>确认密码</label><input type="password" id="regPassword2" placeholder="再次输入密码" /></div>
+        <button class="auth-btn" id="regBtn" type="button">注册</button>
+        <p class="auth-err" id="regErr"></p>
+        <p class="auth-ok" id="regOk"></p>
+      </div>
+    </div>
+
+    <!-- 已登录 -->
+    <div id="authUser" hidden>
+      <div class="auth-section">
+        <h4>我的账户</h4>
+        <div class="auth-email-row"><span>邮箱：<strong id="userEmail"></strong></span><button class="auth-logout" id="logoutBtn" type="button">退出</button></div>
+        <div class="auth-profile">
+          <div class="auth-field"><label>昵称</label><input type="text" id="profileNickname" maxlength="20" /></div>
+          <div class="auth-field"><label>QQ</label><input type="text" id="profileQQ" maxlength="20" inputmode="numeric" /></div>
+          <div class="auth-field"><label>手机号</label><input type="text" id="profilePhone" maxlength="20" /></div>
+          <div class="auth-field"><label>收货地址</label><input type="text" id="profileAddress" maxlength="120" placeholder="省 / 市 / 区 + 详细地址" /></div>
+          <button class="auth-btn" id="saveProfileBtn" type="button">保存资料</button>
+          <p class="auth-ok" id="profileOk"></p>
+        </div>
+      </div>
+      <div class="auth-section password-section">
+        <h4>修改密码</h4>
+        <div class="auth-field"><label>当前密码</label><input type="password" id="oldPassword" placeholder="当前密码" /></div>
+        <div class="auth-field"><label>新密码</label><input type="password" id="newPassword" placeholder="6-64 位新密码" /></div>
+        <div class="auth-field"><label>确认新密码</label><input type="password" id="newPassword2" placeholder="再次输入新密码" /></div>
+        <button class="auth-btn" id="changePasswordBtn" type="button">修改密码</button>
+        <p class="auth-ok" id="pwdOk"></p>
+        <p class="auth-err" id="pwdErr"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ===== 账号系统 + 优惠券购买流程 ===== */
+(function () {
+  var AUTH_API = 'https://caelus-terminal.app.workbuddy.host/api/auth';
+  var ORDER_API = 'https://caelus-terminal.app.workbuddy.host/api/order';
+  var COOKIE_NAME = 'caelus_auth_token';
+  var PRICE = 9.9;
+
+  // ---- cookie 工具 ----
+  function setCookie(name, value, days) {
+    var max = days ? '; max-age=' + (days * 86400) : '';
+    document.cookie = name + '=' + encodeURIComponent(value) + '; path=/' + max + '; SameSite=Lax';
+  }
+  function getCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function clearCookie(name) { document.cookie = name + '=; path=/; max-age=0'; }
+
+  // ---- auth 请求 ----
+  function authPost(path, body) {
+    return fetch(AUTH_API + path, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body || {})
+    }).then(function (r) { return r.json().catch(function () { return { ok: false, error: '网络错误' }; }); });
+  }
+
+  // ---- 账号状态 ----
+  var currentToken = getCookie(COOKIE_NAME);
+  var currentUser = null;
+
+  function renderNav() {
+    var el = document.getElementById('navAccount');
+    if (!el) return;
+    if (currentUser) {
+      el.textContent = (currentUser.nickname || currentUser.email.split('@')[0]);
+      el.classList.add('nav-account--in');
+    } else {
+      el.textContent = '我的';
+      el.classList.remove('nav-account--in');
+    }
+  }
+
+  function loadUser() {
+    if (!currentToken) return Promise.resolve();
+    return authPost('/me', { token: currentToken }).then(function (r) {
+      if (r.ok) { currentUser = r.user; } else { currentToken = ''; clearCookie(COOKIE_NAME); }
+      renderNav();
+    });
+  }
+
+  // ---- 账号面板 DOM ----
+  var authOverlay = document.getElementById('authOverlay');
+  var authClose = document.getElementById('authClose');
+  var authGuest = document.getElementById('authGuest');
+  var authUser = document.getElementById('authUser');
+  var authTabs = document.querySelectorAll('.auth-tab');
+  var loginPanel = document.getElementById('authLoginPanel');
+  var regPanel = document.getElementById('authRegisterPanel');
+
+  function openAuth() {
+    renderAuthPanel();
+    authOverlay.hidden = false;
+  }
+  function closeAuth() { authOverlay.hidden = true; }
+  authClose && authClose.addEventListener('click', closeAuth);
+  authOverlay && authOverlay.addEventListener('click', function (e) { if (e.target === authOverlay) closeAuth(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && authOverlay && !authOverlay.hidden) closeAuth(); });
+
+  document.getElementById('navAccount').addEventListener('click', function (e) { e.preventDefault(); openAuth(); });
+
+  authTabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      var tab = t.getAttribute('data-auth-tab');
+      authTabs.forEach(function (x) { x.classList.toggle('active', x === t); });
+      loginPanel.hidden = tab !== 'login';
+      regPanel.hidden = tab !== 'register';
+    });
+  });
+
+  function renderAuthPanel() {
+    if (!authOverlay) return;
+    if (currentUser) {
+      authGuest.hidden = true;
+      authUser.hidden = false;
+      document.getElementById('userEmail').textContent = currentUser.email;
+      document.getElementById('profileNickname').value = currentUser.nickname || '';
+      document.getElementById('profileQQ').value = currentUser.qq || '';
+      document.getElementById('profilePhone').value = currentUser.phone || '';
+      document.getElementById('profileAddress').value = currentUser.address || '';
+    } else {
+      authGuest.hidden = false;
+      authUser.hidden = true;
+    }
+  }
+
+  // ---- 登录 ----
+  var loginBtn = document.getElementById('loginBtn');
+  loginBtn && loginBtn.addEventListener('click', function () {
+    var email = document.getElementById('loginEmail').value.trim();
+    var pw = document.getElementById('loginPassword').value;
+    document.getElementById('loginErr').textContent = '';
+    authPost('/login', { email: email, password: pw }).then(function (r) {
+      if (r.ok) {
+        currentToken = r.token;
+        currentUser = r.user;
+        setCookie(COOKIE_NAME, r.token, 30);
+        renderAuthPanel();
+        renderNav();
+      } else {
+        document.getElementById('loginErr').textContent = r.error || '登录失败';
+      }
+    });
+  });
+
+  // ---- 注册验证码 ----
+  var regSendBtn = document.getElementById('regSendCode');
+  regSendBtn && regSendBtn.addEventListener('click', function () {
+    var email = document.getElementById('regEmail').value.trim();
+    document.getElementById('regErr').textContent = '';
+    regSendBtn.disabled = true;
+    authPost('/send-code', { email: email, purpose: 'register' }).then(function (r) {
+      if (r.ok) {
+        document.getElementById('regOk').textContent = '验证码已发送，请查收邮件';
+        var n = 60;
+        var t = setInterval(function () {
+          regSendBtn.textContent = --n + 's';
+          if (n <= 0) { clearInterval(t); regSendBtn.disabled = false; regSendBtn.textContent = '获取验证码'; }
+        }, 1000);
+      } else {
+        document.getElementById('regErr').textContent = r.error || '发送失败';
+        regSendBtn.disabled = false;
+      }
+    }).catch(function () { regSendBtn.disabled = false; });
+  });
+
+  // ---- 注册 ----
+  var regBtn = document.getElementById('regBtn');
+  regBtn && regBtn.addEventListener('click', function () {
+    var email = document.getElementById('regEmail').value.trim();
+    var code = document.getElementById('regCode').value.trim();
+    var pw = document.getElementById('regPassword').value;
+    var pw2 = document.getElementById('regPassword2').value;
+    var nickname = document.getElementById('regNickname').value.trim();
+    document.getElementById('regErr').textContent = '';
+    document.getElementById('regOk').textContent = '';
+    if (pw !== pw2) { document.getElementById('regErr').textContent = '两次密码不一致'; return; }
+    authPost('/register', { email: email, code: code, password: pw, nickname: nickname }).then(function (r) {
+      if (r.ok) {
+        currentToken = r.token;
+        currentUser = r.user;
+        setCookie(COOKIE_NAME, r.token, 30);
+        renderAuthPanel();
+        renderNav();
+      } else {
+        document.getElementById('regErr').textContent = r.error || '注册失败';
+      }
+    });
+  });
+
+  // ---- 退出 ----
+  var logoutBtn = document.getElementById('logoutBtn');
+  logoutBtn && logoutBtn.addEventListener('click', function () {
+    authPost('/logout', { token: currentToken });
+    currentToken = ''; currentUser = null; clearCookie(COOKIE_NAME);
+    renderAuthPanel(); renderNav();
+  });
+
+  // ---- 修改资料 ----
+  var saveProfileBtn = document.getElementById('saveProfileBtn');
+  saveProfileBtn && saveProfileBtn.addEventListener('click', function () {
+    var body = {
+      token: currentToken,
+      nickname: document.getElementById('profileNickname').value,
+      qq: document.getElementById('profileQQ').value,
+      phone: document.getElementById('profilePhone').value,
+      address: document.getElementById('profileAddress').value
+    };
+    document.getElementById('profileOk').textContent = '';
+    authPost('/update', body).then(function (r) {
+      if (r.ok) { currentUser = r.user; renderNav(); document.getElementById('profileOk').textContent = '保存成功'; }
+      else { document.getElementById('profileOk').textContent = r.error || '保存失败'; }
+    });
+  });
+
+  // ---- 修改密码 ----
+  var changePwdBtn = document.getElementById('changePasswordBtn');
+  changePwdBtn && changePwdBtn.addEventListener('click', function () {
+    var oldPw = document.getElementById('oldPassword').value;
+    var newPw = document.getElementById('newPassword').value;
+    var newPw2 = document.getElementById('newPassword2').value;
+    document.getElementById('pwdErr').textContent = '';
+    document.getElementById('pwdOk').textContent = '';
+    if (newPw !== newPw2) { document.getElementById('pwdErr').textContent = '两次新密码不一致'; return; }
+    authPost('/password', { token: currentToken, oldPassword: oldPw, newPassword: newPw }).then(function (r) {
+      if (r.ok) {
+        document.getElementById('pwdOk').textContent = '密码已修改，请使用新密码重新登录';
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('newPassword2').value = '';
+      } else {
+        document.getElementById('pwdErr').textContent = r.error || '修改失败';
+      }
+    });
+  });
+
+  // ---- 支付流程 ----
+  var buyBtn = document.getElementById('buyBtn');
+  var payOverlay = document.getElementById('payOverlay');
+  if (buyBtn && payOverlay) {
+    var stepPay = document.getElementById('payStepPay');
+    var stepThanks = document.getElementById('payStepThanks');
+    var amountEl = document.getElementById('payAmount');
+    var payErr = document.getElementById('payErr');
+    var payPaid = document.getElementById('payPaid');
+    var payClose = document.getElementById('payClose');
+    var payDone = document.getElementById('payDone');
+    var stash = null;
+
+    function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+    function showPay(step) { stepPay.hidden = step !== 'pay'; stepThanks.hidden = step !== 'thanks'; }
+    function openPay() { showPay('pay'); payErr.textContent = ''; payOverlay.hidden = false; }
+    function closePay() { payOverlay.hidden = true; }
+
+    payClose && payClose.addEventListener('click', closePay);
+    payOverlay && payOverlay.addEventListener('click', function (e) { if (e.target === payOverlay) closePay(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !payOverlay.hidden) closePay(); });
+    payDone && payDone.addEventListener('click', closePay);
+
+    buyBtn.addEventListener('click', function () {
+      if (!currentUser) { openAuth(); return; }
+      stash = {
+        orderId: 'C' + Date.now().toString(36).toUpperCase(),
+        product: 'coupon',
+        productName: '9.9 元优惠券',
+        qty: 1,
+        amount: PRICE,
+        name: currentUser.nickname || currentUser.email.split('@')[0],
+        contact: [currentUser.email, 'QQ:' + (currentUser.qq || ''), currentUser.phone || ''].filter(Boolean).join(' / ').slice(0, 80),
+        address: (currentUser.address || '未填写').slice(0, 200),
+        note: '优惠券订单 · ' + currentUser.email,
+        paidVia: 'qrcode',
+        page: location.pathname
+      };
+      amountEl.textContent = yuan(stash.amount);
+      openPay();
+    });
+
+    payPaid && payPaid.addEventListener('click', function () {
+      if (!stash) return;
+      payPaid.disabled = true;
+      var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
+      if (Date.now() - last < 60000) { payErr.textContent = '提交太频繁，请 1 分钟后再试'; payPaid.disabled = false; return; }
+      fetch(ORDER_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(stash) })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
+        .then(function () { localStorage.setItem('shop_last_submit', String(Date.now())); showPay('thanks'); })
+        .catch(function () { payErr.textContent = '提交失败，请检查网络后重试。'; })
+        .then(function () { payPaid.disabled = false; });
+    });
+  }
+
+  // ---- 初始化 ----
+  loadUser();
+})();
+
+</script>
+
+<div class="maint-overlay" id="maintOverlay" hidden>
+  <div class="maint-modal" role="dialog" aria-modal="true" aria-labelledby="maintTitle">
+    <h3 id="maintTitle">商店维护中</h3>
+    <p>商店正在维护升级，暂时无法下单。<br>恢复时间请留意公告，感谢你的理解。</p>
+  </div>
+</div>
+<script>
+/* ===== 商店维护提示：把 MAINTENANCE 改为 true 即开启（常驻，不可关闭） ===== */
+(function () {
+  var MAINTENANCE = false;
+  var overlay = document.getElementById('maintOverlay');
+  if (!overlay || !MAINTENANCE) return;
+  overlay.hidden = false;
+})();
+</script>
+</body>
+</html>

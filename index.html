@@ -542,6 +542,49 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .maint-modal p{margin:0;font-size:.88rem;font-weight:300;color:var(--text-secondary,#d0d0d0);line-height:1.75}
 @media (prefers-reduced-motion:reduce){.maint-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
+<style>
+/* ===== 账号面板 ===== */
+.auth-overlay{position:fixed;inset:0;z-index:2147483002;display:flex;overflow-y:auto;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.auth-overlay[hidden]{display:none}
+.auth-modal{position:relative;margin:auto;width:100%;max-width:420px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:18px;box-shadow:var(--shadow-card);padding:28px 24px;pointer-events:auto}
+.auth-close{position:absolute;top:6px;right:8px;z-index:2;width:36px;height:36px;border:0;background:transparent;color:var(--text-muted);font-size:22px;line-height:1;pointer-events:auto;cursor:pointer}
+.auth-tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:1px solid var(--border-color)}
+.auth-tab{flex:1;padding:.55rem 0;border:0;background:transparent;color:var(--text-secondary);font-size:.92rem;font-family:inherit;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s}
+.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.auth-tab:hover{color:var(--text-primary)}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;margin-bottom:5px;font-size:.85rem;color:var(--text-secondary)}
+.auth-field input{width:100%;box-sizing:border-box;padding:.55rem .75rem;border:1px solid var(--border-color);border-radius:10px;background:var(--bg-page);color:var(--text-primary);font-family:inherit;font-size:.9rem}
+.auth-field input:focus{outline:none;border-color:var(--accent)}
+.auth-code-row{display:flex;gap:10px}
+.auth-code-row input{flex:1}
+.auth-code-row button{white-space:nowrap;padding:0 14px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:10px;font-family:inherit;font-size:.85rem;cursor:pointer}
+.auth-code-row button:disabled{opacity:.5;cursor:not-allowed}
+.auth-btn{display:block;width:100%;margin-top:8px;text-align:center;background:var(--accent);color:#fff;font-size:.95rem;padding:.65rem 1rem;border:0;border-radius:10px;cursor:pointer;transition:filter .2s;font-family:inherit}
+.auth-btn:hover{filter:brightness(1.08)}
+.auth-btn[disabled]{opacity:.6;cursor:not-allowed}
+.auth-err{margin:8px 0 0;font-size:.78rem;color:#ff6b6b;text-align:center;min-height:1.2em}
+.auth-ok{margin:8px 0 0;font-size:.78rem;color:#30d158;text-align:center;min-height:1.2em}
+.auth-hint{margin-top:14px;font-size:.8rem;color:var(--text-muted);line-height:1.7}
+.auth-section h4{margin:0 0 14px;font-size:1.1rem;font-weight:600;color:var(--text-primary)}
+.auth-profile{display:grid;gap:14px}
+.auth-profile .auth-field{margin:0}
+.auth-email-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.9rem;color:var(--text-secondary)}
+.auth-email-row strong{color:var(--text-primary)}
+.auth-logout{padding:.45rem 12px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);border-radius:8px;font-family:inherit;font-size:.85rem;cursor:pointer}
+.auth-logout:hover{color:var(--text-primary)}
+.password-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--border-color)}
+.nav-account{font-size:.9rem;color:var(--text-secondary);text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .2s}
+.nav-account:hover{background:var(--bg-card)}
+@media (prefers-reduced-motion:reduce){.auth-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
+<style>
+/* ===== 优惠券购买区 ===== */
+.buy-card{text-align:center;padding:10px 0}
+.buy-price{font-size:1.1rem;color:var(--text-secondary);margin:0 0 8px}
+.buy-price strong{font-size:1.8rem;color:var(--price-color);font-weight:700}
+.buy-tip{font-size:.85rem;color:var(--text-muted);margin:0 0 18px}
+</style>
 </head>
 <body>
 
@@ -551,7 +594,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   <div class="nav-right">
     <ul class="nav-links">
       <li><a href="./">商店</a></li>
-      <li><a href="orders.html">订单查询</a></li>
+      <li><a href="orders.html">订单查询</a></li><li><a href="#" id="navAccount">我的</a></li>
       <li><a href="https://www.caelus.top/nav/" target="_blank">导航</a></li>
       <li><a href="https://news.caelus.top/" target="_blank">新闻中心</a></li>
     </ul>
@@ -591,7 +634,19 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     </div>
   </a>
 
-  <div class="product-card reveal" style="--reveal-delay:0.08s">
+  <a class="product-card reveal" style="--reveal-delay:0.06s" href="coupon.html">
+    <div class="thumb"><img src="assets/coupon-banner.png" alt="9.9 元优惠券" loading="lazy"></div>
+    <div class="body">
+      <h2>9.9 元优惠券</h2>
+      <p>全场通用优惠券，下单自动抵扣 9.9 元，有效期至 2026-12-31。</p>
+      <div class="card-foot">
+        <span class="card-price">￥9.9</span>
+        <span class="card-more">查看详情 →</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="product-card reveal" style="--reveal-delay:0.12s">
     <div class="thumb"><div class="thumb-pending">敬请期待</div></div>
     <div class="body">
       <h2>Caelus Studio 吧唧</h2>
@@ -634,6 +689,353 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 </section>
 
 <!-- ===== 页脚 ===== -->
+<!-- ===== 账号面板弹窗 ===== -->
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="auth-close" id="authClose" aria-label="关闭">&times;</button>
+
+    <!-- 未登录 -->
+    <div id="authGuest">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-tab="login" type="button">登录</button>
+        <button class="auth-tab" data-auth-tab="register" type="button">注册</button>
+      </div>
+
+      <div id="authLoginPanel">
+        <div class="auth-field"><label>电子邮箱</label><input type="email" id="loginEmail" placeholder="you@example.com" /></div>
+        <div class="auth-field"><label>密码</label><input type="password" id="loginPassword" placeholder="密码" /></div>
+        <button class="auth-btn" id="loginBtn" type="button">登录</button>
+        <p class="auth-err" id="loginErr"></p>
+      </div>
+
+      <div id="authRegisterPanel" hidden>
+        <div class="auth-field"><label>电子邮箱</label><input type="email" id="regEmail" placeholder="you@example.com" /></div>
+        <div class="auth-field"><label>昵称</label><input type="text" id="regNickname" maxlength="20" placeholder="怎么称呼你" /></div>
+        <div class="auth-field">
+          <label>验证码</label>
+          <div class="auth-code-row"><input type="text" id="regCode" maxlength="6" inputmode="numeric" placeholder="6 位验证码" /><button id="regSendCode" type="button">获取验证码</button></div>
+        </div>
+        <div class="auth-field"><label>密码</label><input type="password" id="regPassword" placeholder="6-64 位密码" /></div>
+        <div class="auth-field"><label>确认密码</label><input type="password" id="regPassword2" placeholder="再次输入密码" /></div>
+        <button class="auth-btn" id="regBtn" type="button">注册</button>
+        <p class="auth-err" id="regErr"></p>
+        <p class="auth-ok" id="regOk"></p>
+      </div>
+    </div>
+
+    <!-- 已登录 -->
+    <div id="authUser" hidden>
+      <div class="auth-section">
+        <h4>我的账户</h4>
+        <div class="auth-email-row"><span>邮箱：<strong id="userEmail"></strong></span><button class="auth-logout" id="logoutBtn" type="button">退出</button></div>
+        <div class="auth-profile">
+          <div class="auth-field"><label>昵称</label><input type="text" id="profileNickname" maxlength="20" /></div>
+          <div class="auth-field"><label>QQ</label><input type="text" id="profileQQ" maxlength="20" inputmode="numeric" /></div>
+          <div class="auth-field"><label>手机号</label><input type="text" id="profilePhone" maxlength="20" /></div>
+          <div class="auth-field"><label>收货地址</label><input type="text" id="profileAddress" maxlength="120" placeholder="省 / 市 / 区 + 详细地址" /></div>
+          <button class="auth-btn" id="saveProfileBtn" type="button">保存资料</button>
+          <p class="auth-ok" id="profileOk"></p>
+        </div>
+      </div>
+      <div class="auth-section password-section">
+        <h4>修改密码</h4>
+        <div class="auth-field"><label>当前密码</label><input type="password" id="oldPassword" placeholder="当前密码" /></div>
+        <div class="auth-field"><label>新密码</label><input type="password" id="newPassword" placeholder="6-64 位新密码" /></div>
+        <div class="auth-field"><label>确认新密码</label><input type="password" id="newPassword2" placeholder="再次输入新密码" /></div>
+        <button class="auth-btn" id="changePasswordBtn" type="button">修改密码</button>
+        <p class="auth-ok" id="pwdOk"></p>
+        <p class="auth-err" id="pwdErr"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ===== 账号系统 + 优惠券购买流程 ===== */
+(function () {
+  var AUTH_API = 'https://caelus-terminal.app.workbuddy.host/api/auth';
+  var ORDER_API = 'https://caelus-terminal.app.workbuddy.host/api/order';
+  var COOKIE_NAME = 'caelus_auth_token';
+  var PRICE = 9.9;
+
+  // ---- cookie 工具 ----
+  function setCookie(name, value, days) {
+    var max = days ? '; max-age=' + (days * 86400) : '';
+    document.cookie = name + '=' + encodeURIComponent(value) + '; path=/' + max + '; SameSite=Lax';
+  }
+  function getCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function clearCookie(name) { document.cookie = name + '=; path=/; max-age=0'; }
+
+  // ---- auth 请求 ----
+  function authPost(path, body) {
+    return fetch(AUTH_API + path, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body || {})
+    }).then(function (r) { return r.json().catch(function () { return { ok: false, error: '网络错误' }; }); });
+  }
+
+  // ---- 账号状态 ----
+  var currentToken = getCookie(COOKIE_NAME);
+  var currentUser = null;
+
+  function renderNav() {
+    var el = document.getElementById('navAccount');
+    if (!el) return;
+    if (currentUser) {
+      el.textContent = (currentUser.nickname || currentUser.email.split('@')[0]);
+      el.classList.add('nav-account--in');
+    } else {
+      el.textContent = '我的';
+      el.classList.remove('nav-account--in');
+    }
+  }
+
+  function loadUser() {
+    if (!currentToken) return Promise.resolve();
+    return authPost('/me', { token: currentToken }).then(function (r) {
+      if (r.ok) { currentUser = r.user; } else { currentToken = ''; clearCookie(COOKIE_NAME); }
+      renderNav();
+    });
+  }
+
+  // ---- 账号面板 DOM ----
+  var authOverlay = document.getElementById('authOverlay');
+  var authClose = document.getElementById('authClose');
+  var authGuest = document.getElementById('authGuest');
+  var authUser = document.getElementById('authUser');
+  var authTabs = document.querySelectorAll('.auth-tab');
+  var loginPanel = document.getElementById('authLoginPanel');
+  var regPanel = document.getElementById('authRegisterPanel');
+
+  function openAuth() {
+    renderAuthPanel();
+    authOverlay.hidden = false;
+  }
+  function closeAuth() { authOverlay.hidden = true; }
+  authClose && authClose.addEventListener('click', closeAuth);
+  authOverlay && authOverlay.addEventListener('click', function (e) { if (e.target === authOverlay) closeAuth(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && authOverlay && !authOverlay.hidden) closeAuth(); });
+
+  document.getElementById('navAccount').addEventListener('click', function (e) { e.preventDefault(); openAuth(); });
+
+  authTabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      var tab = t.getAttribute('data-auth-tab');
+      authTabs.forEach(function (x) { x.classList.toggle('active', x === t); });
+      loginPanel.hidden = tab !== 'login';
+      regPanel.hidden = tab !== 'register';
+    });
+  });
+
+  function renderAuthPanel() {
+    if (!authOverlay) return;
+    if (currentUser) {
+      authGuest.hidden = true;
+      authUser.hidden = false;
+      document.getElementById('userEmail').textContent = currentUser.email;
+      document.getElementById('profileNickname').value = currentUser.nickname || '';
+      document.getElementById('profileQQ').value = currentUser.qq || '';
+      document.getElementById('profilePhone').value = currentUser.phone || '';
+      document.getElementById('profileAddress').value = currentUser.address || '';
+    } else {
+      authGuest.hidden = false;
+      authUser.hidden = true;
+    }
+  }
+
+  // ---- 登录 ----
+  var loginBtn = document.getElementById('loginBtn');
+  loginBtn && loginBtn.addEventListener('click', function () {
+    var email = document.getElementById('loginEmail').value.trim();
+    var pw = document.getElementById('loginPassword').value;
+    document.getElementById('loginErr').textContent = '';
+    authPost('/login', { email: email, password: pw }).then(function (r) {
+      if (r.ok) {
+        currentToken = r.token;
+        currentUser = r.user;
+        setCookie(COOKIE_NAME, r.token, 30);
+        renderAuthPanel();
+        renderNav();
+      } else {
+        document.getElementById('loginErr').textContent = r.error || '登录失败';
+      }
+    });
+  });
+
+  // ---- 注册验证码 ----
+  var regSendBtn = document.getElementById('regSendCode');
+  regSendBtn && regSendBtn.addEventListener('click', function () {
+    var email = document.getElementById('regEmail').value.trim();
+    document.getElementById('regErr').textContent = '';
+    regSendBtn.disabled = true;
+    authPost('/send-code', { email: email, purpose: 'register' }).then(function (r) {
+      if (r.ok) {
+        document.getElementById('regOk').textContent = '验证码已发送，请查收邮件';
+        var n = 60;
+        var t = setInterval(function () {
+          regSendBtn.textContent = --n + 's';
+          if (n <= 0) { clearInterval(t); regSendBtn.disabled = false; regSendBtn.textContent = '获取验证码'; }
+        }, 1000);
+      } else {
+        document.getElementById('regErr').textContent = r.error || '发送失败';
+        regSendBtn.disabled = false;
+      }
+    }).catch(function () { regSendBtn.disabled = false; });
+  });
+
+  // ---- 注册 ----
+  var regBtn = document.getElementById('regBtn');
+  regBtn && regBtn.addEventListener('click', function () {
+    var email = document.getElementById('regEmail').value.trim();
+    var code = document.getElementById('regCode').value.trim();
+    var pw = document.getElementById('regPassword').value;
+    var pw2 = document.getElementById('regPassword2').value;
+    var nickname = document.getElementById('regNickname').value.trim();
+    document.getElementById('regErr').textContent = '';
+    document.getElementById('regOk').textContent = '';
+    if (pw !== pw2) { document.getElementById('regErr').textContent = '两次密码不一致'; return; }
+    authPost('/register', { email: email, code: code, password: pw, nickname: nickname }).then(function (r) {
+      if (r.ok) {
+        currentToken = r.token;
+        currentUser = r.user;
+        setCookie(COOKIE_NAME, r.token, 30);
+        renderAuthPanel();
+        renderNav();
+      } else {
+        document.getElementById('regErr').textContent = r.error || '注册失败';
+      }
+    });
+  });
+
+  // ---- 退出 ----
+  var logoutBtn = document.getElementById('logoutBtn');
+  logoutBtn && logoutBtn.addEventListener('click', function () {
+    authPost('/logout', { token: currentToken });
+    currentToken = ''; currentUser = null; clearCookie(COOKIE_NAME);
+    renderAuthPanel(); renderNav();
+  });
+
+  // ---- 修改资料 ----
+  var saveProfileBtn = document.getElementById('saveProfileBtn');
+  saveProfileBtn && saveProfileBtn.addEventListener('click', function () {
+    var body = {
+      token: currentToken,
+      nickname: document.getElementById('profileNickname').value,
+      qq: document.getElementById('profileQQ').value,
+      phone: document.getElementById('profilePhone').value,
+      address: document.getElementById('profileAddress').value
+    };
+    document.getElementById('profileOk').textContent = '';
+    authPost('/update', body).then(function (r) {
+      if (r.ok) { currentUser = r.user; renderNav(); document.getElementById('profileOk').textContent = '保存成功'; }
+      else { document.getElementById('profileOk').textContent = r.error || '保存失败'; }
+    });
+  });
+
+  // ---- 修改密码 ----
+  var changePwdBtn = document.getElementById('changePasswordBtn');
+  changePwdBtn && changePwdBtn.addEventListener('click', function () {
+    var oldPw = document.getElementById('oldPassword').value;
+    var newPw = document.getElementById('newPassword').value;
+    var newPw2 = document.getElementById('newPassword2').value;
+    document.getElementById('pwdErr').textContent = '';
+    document.getElementById('pwdOk').textContent = '';
+    if (newPw !== newPw2) { document.getElementById('pwdErr').textContent = '两次新密码不一致'; return; }
+    authPost('/password', { token: currentToken, oldPassword: oldPw, newPassword: newPw }).then(function (r) {
+      if (r.ok) {
+        document.getElementById('pwdOk').textContent = '密码已修改，请使用新密码重新登录';
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('newPassword2').value = '';
+      } else {
+        document.getElementById('pwdErr').textContent = r.error || '修改失败';
+      }
+    });
+  });
+
+  // ---- 支付流程 ----
+  var buyBtn = document.getElementById('buyBtn');
+  var payOverlay = document.getElementById('payOverlay');
+  if (buyBtn && payOverlay) {
+    var stepPay = document.getElementById('payStepPay');
+    var stepThanks = document.getElementById('payStepThanks');
+    var amountEl = document.getElementById('payAmount');
+    var payErr = document.getElementById('payErr');
+    var payPaid = document.getElementById('payPaid');
+    var payClose = document.getElementById('payClose');
+    var payDone = document.getElementById('payDone');
+    var stash = null;
+
+    function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+    function showPay(step) { stepPay.hidden = step !== 'pay'; stepThanks.hidden = step !== 'thanks'; }
+    function openPay() { showPay('pay'); payErr.textContent = ''; payOverlay.hidden = false; }
+    function closePay() { payOverlay.hidden = true; }
+
+    payClose && payClose.addEventListener('click', closePay);
+    payOverlay && payOverlay.addEventListener('click', function (e) { if (e.target === payOverlay) closePay(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !payOverlay.hidden) closePay(); });
+    payDone && payDone.addEventListener('click', closePay);
+
+    buyBtn.addEventListener('click', function () {
+      if (!currentUser) { openAuth(); return; }
+      stash = {
+        orderId: 'C' + Date.now().toString(36).toUpperCase(),
+        product: 'coupon',
+        productName: '9.9 元优惠券',
+        qty: 1,
+        amount: PRICE,
+        name: currentUser.nickname || currentUser.email.split('@')[0],
+        contact: [currentUser.email, 'QQ:' + (currentUser.qq || ''), currentUser.phone || ''].filter(Boolean).join(' / ').slice(0, 80),
+        address: (currentUser.address || '未填写').slice(0, 200),
+        note: '优惠券订单 · ' + currentUser.email,
+        paidVia: 'qrcode',
+        page: location.pathname
+      };
+      amountEl.textContent = yuan(stash.amount);
+      openPay();
+    });
+
+    payPaid && payPaid.addEventListener('click', function () {
+      if (!stash) return;
+      payPaid.disabled = true;
+      var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
+      if (Date.now() - last < 60000) { payErr.textContent = '提交太频繁，请 1 分钟后再试'; payPaid.disabled = false; return; }
+      fetch(ORDER_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(stash) })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
+        .then(function () { localStorage.setItem('shop_last_submit', String(Date.now())); showPay('thanks'); })
+        .catch(function () { payErr.textContent = '提交失败，请检查网络后重试。'; })
+        .then(function () { payPaid.disabled = false; });
+    });
+  }
+
+  // ---- 初始化 ----
+  loadUser();
+})();
+
+</script>
+
+<div class="maint-overlay" id="maintOverlay" hidden>
+  <div class="maint-modal" role="dialog" aria-modal="true" aria-labelledby="maintTitle">
+    <h3 id="maintTitle">商店维护中</h3>
+    <p>商店正在维护升级，暂时无法下单。<br>恢复时间请留意公告，感谢你的理解。</p>
+  </div>
+</div>
+<script>
+/* ===== 商店维护提示：把 MAINTENANCE 改为 true 即开启（常驻，不可关闭） ===== */
+(function () {
+  var MAINTENANCE = false;
+  var overlay = document.getElementById('maintOverlay');
+  if (!overlay || !MAINTENANCE) return;
+  overlay.hidden = false;
+})();
+</script>
+</body>
+</html>
 <div class="footer-links reveal">
   <div class="link-group">
     <h2>本站</h2>
@@ -863,6 +1265,273 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   })();
 </script>
 <script>(function(){if(window.top!==window.self)return;var T='https://caelus-terminal.app.workbuddy.host/api/collect';function t(e,m){try{m=m||{};if(document.title&&!m.title)m.title=String(document.title).replace(/\s*[·|-]\s*Caelus Studio.*$/i,'').slice(0,60);var v=localStorage.getItem('caelus_vid');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('caelus_vid',v)}navigator.sendBeacon(T,JSON.stringify({site:'shop',event:e,meta:m,path:location.pathname,ref:document.referrer,vid:v}))}catch(_){}}window.caelusTrack=t;t('page_view');})();</script>
+<script>
+/* ===== 账号系统 + 优惠券购买流程 ===== */
+(function () {
+  var AUTH_API = 'https://caelus-terminal.app.workbuddy.host/api/auth';
+  var ORDER_API = 'https://caelus-terminal.app.workbuddy.host/api/order';
+  var COOKIE_NAME = 'caelus_auth_token';
+  var PRICE = 9.9;
+
+  // ---- cookie 工具 ----
+  function setCookie(name, value, days) {
+    var max = days ? '; max-age=' + (days * 86400) : '';
+    document.cookie = name + '=' + encodeURIComponent(value) + '; path=/' + max + '; SameSite=Lax';
+  }
+  function getCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function clearCookie(name) { document.cookie = name + '=; path=/; max-age=0'; }
+
+  // ---- auth 请求 ----
+  function authPost(path, body) {
+    return fetch(AUTH_API + path, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body || {})
+    }).then(function (r) { return r.json().catch(function () { return { ok: false, error: '网络错误' }; }); });
+  }
+
+  // ---- 账号状态 ----
+  var currentToken = getCookie(COOKIE_NAME);
+  var currentUser = null;
+
+  function renderNav() {
+    var el = document.getElementById('navAccount');
+    if (!el) return;
+    if (currentUser) {
+      el.textContent = (currentUser.nickname || currentUser.email.split('@')[0]);
+      el.classList.add('nav-account--in');
+    } else {
+      el.textContent = '我的';
+      el.classList.remove('nav-account--in');
+    }
+  }
+
+  function loadUser() {
+    if (!currentToken) return Promise.resolve();
+    return authPost('/me', { token: currentToken }).then(function (r) {
+      if (r.ok) { currentUser = r.user; } else { currentToken = ''; clearCookie(COOKIE_NAME); }
+      renderNav();
+    });
+  }
+
+  // ---- 账号面板 DOM ----
+  var authOverlay = document.getElementById('authOverlay');
+  var authClose = document.getElementById('authClose');
+  var authGuest = document.getElementById('authGuest');
+  var authUser = document.getElementById('authUser');
+  var authTabs = document.querySelectorAll('.auth-tab');
+  var loginPanel = document.getElementById('authLoginPanel');
+  var regPanel = document.getElementById('authRegisterPanel');
+
+  function openAuth() {
+    renderAuthPanel();
+    authOverlay.hidden = false;
+  }
+  function closeAuth() { authOverlay.hidden = true; }
+  authClose && authClose.addEventListener('click', closeAuth);
+  authOverlay && authOverlay.addEventListener('click', function (e) { if (e.target === authOverlay) closeAuth(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && authOverlay && !authOverlay.hidden) closeAuth(); });
+
+  document.getElementById('navAccount').addEventListener('click', function (e) { e.preventDefault(); openAuth(); });
+
+  authTabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      var tab = t.getAttribute('data-auth-tab');
+      authTabs.forEach(function (x) { x.classList.toggle('active', x === t); });
+      loginPanel.hidden = tab !== 'login';
+      regPanel.hidden = tab !== 'register';
+    });
+  });
+
+  function renderAuthPanel() {
+    if (!authOverlay) return;
+    if (currentUser) {
+      authGuest.hidden = true;
+      authUser.hidden = false;
+      document.getElementById('userEmail').textContent = currentUser.email;
+      document.getElementById('profileNickname').value = currentUser.nickname || '';
+      document.getElementById('profileQQ').value = currentUser.qq || '';
+      document.getElementById('profilePhone').value = currentUser.phone || '';
+      document.getElementById('profileAddress').value = currentUser.address || '';
+    } else {
+      authGuest.hidden = false;
+      authUser.hidden = true;
+    }
+  }
+
+  // ---- 登录 ----
+  var loginBtn = document.getElementById('loginBtn');
+  loginBtn && loginBtn.addEventListener('click', function () {
+    var email = document.getElementById('loginEmail').value.trim();
+    var pw = document.getElementById('loginPassword').value;
+    document.getElementById('loginErr').textContent = '';
+    authPost('/login', { email: email, password: pw }).then(function (r) {
+      if (r.ok) {
+        currentToken = r.token;
+        currentUser = r.user;
+        setCookie(COOKIE_NAME, r.token, 30);
+        renderAuthPanel();
+        renderNav();
+      } else {
+        document.getElementById('loginErr').textContent = r.error || '登录失败';
+      }
+    });
+  });
+
+  // ---- 注册验证码 ----
+  var regSendBtn = document.getElementById('regSendCode');
+  regSendBtn && regSendBtn.addEventListener('click', function () {
+    var email = document.getElementById('regEmail').value.trim();
+    document.getElementById('regErr').textContent = '';
+    regSendBtn.disabled = true;
+    authPost('/send-code', { email: email, purpose: 'register' }).then(function (r) {
+      if (r.ok) {
+        document.getElementById('regOk').textContent = '验证码已发送，请查收邮件';
+        var n = 60;
+        var t = setInterval(function () {
+          regSendBtn.textContent = --n + 's';
+          if (n <= 0) { clearInterval(t); regSendBtn.disabled = false; regSendBtn.textContent = '获取验证码'; }
+        }, 1000);
+      } else {
+        document.getElementById('regErr').textContent = r.error || '发送失败';
+        regSendBtn.disabled = false;
+      }
+    }).catch(function () { regSendBtn.disabled = false; });
+  });
+
+  // ---- 注册 ----
+  var regBtn = document.getElementById('regBtn');
+  regBtn && regBtn.addEventListener('click', function () {
+    var email = document.getElementById('regEmail').value.trim();
+    var code = document.getElementById('regCode').value.trim();
+    var pw = document.getElementById('regPassword').value;
+    var pw2 = document.getElementById('regPassword2').value;
+    var nickname = document.getElementById('regNickname').value.trim();
+    document.getElementById('regErr').textContent = '';
+    document.getElementById('regOk').textContent = '';
+    if (pw !== pw2) { document.getElementById('regErr').textContent = '两次密码不一致'; return; }
+    authPost('/register', { email: email, code: code, password: pw, nickname: nickname }).then(function (r) {
+      if (r.ok) {
+        currentToken = r.token;
+        currentUser = r.user;
+        setCookie(COOKIE_NAME, r.token, 30);
+        renderAuthPanel();
+        renderNav();
+      } else {
+        document.getElementById('regErr').textContent = r.error || '注册失败';
+      }
+    });
+  });
+
+  // ---- 退出 ----
+  var logoutBtn = document.getElementById('logoutBtn');
+  logoutBtn && logoutBtn.addEventListener('click', function () {
+    authPost('/logout', { token: currentToken });
+    currentToken = ''; currentUser = null; clearCookie(COOKIE_NAME);
+    renderAuthPanel(); renderNav();
+  });
+
+  // ---- 修改资料 ----
+  var saveProfileBtn = document.getElementById('saveProfileBtn');
+  saveProfileBtn && saveProfileBtn.addEventListener('click', function () {
+    var body = {
+      token: currentToken,
+      nickname: document.getElementById('profileNickname').value,
+      qq: document.getElementById('profileQQ').value,
+      phone: document.getElementById('profilePhone').value,
+      address: document.getElementById('profileAddress').value
+    };
+    document.getElementById('profileOk').textContent = '';
+    authPost('/update', body).then(function (r) {
+      if (r.ok) { currentUser = r.user; renderNav(); document.getElementById('profileOk').textContent = '保存成功'; }
+      else { document.getElementById('profileOk').textContent = r.error || '保存失败'; }
+    });
+  });
+
+  // ---- 修改密码 ----
+  var changePwdBtn = document.getElementById('changePasswordBtn');
+  changePwdBtn && changePwdBtn.addEventListener('click', function () {
+    var oldPw = document.getElementById('oldPassword').value;
+    var newPw = document.getElementById('newPassword').value;
+    var newPw2 = document.getElementById('newPassword2').value;
+    document.getElementById('pwdErr').textContent = '';
+    document.getElementById('pwdOk').textContent = '';
+    if (newPw !== newPw2) { document.getElementById('pwdErr').textContent = '两次新密码不一致'; return; }
+    authPost('/password', { token: currentToken, oldPassword: oldPw, newPassword: newPw }).then(function (r) {
+      if (r.ok) {
+        document.getElementById('pwdOk').textContent = '密码已修改，请使用新密码重新登录';
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('newPassword2').value = '';
+      } else {
+        document.getElementById('pwdErr').textContent = r.error || '修改失败';
+      }
+    });
+  });
+
+  // ---- 支付流程 ----
+  var buyBtn = document.getElementById('buyBtn');
+  var payOverlay = document.getElementById('payOverlay');
+  if (buyBtn && payOverlay) {
+    var stepPay = document.getElementById('payStepPay');
+    var stepThanks = document.getElementById('payStepThanks');
+    var amountEl = document.getElementById('payAmount');
+    var payErr = document.getElementById('payErr');
+    var payPaid = document.getElementById('payPaid');
+    var payClose = document.getElementById('payClose');
+    var payDone = document.getElementById('payDone');
+    var stash = null;
+
+    function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+    function showPay(step) { stepPay.hidden = step !== 'pay'; stepThanks.hidden = step !== 'thanks'; }
+    function openPay() { showPay('pay'); payErr.textContent = ''; payOverlay.hidden = false; }
+    function closePay() { payOverlay.hidden = true; }
+
+    payClose && payClose.addEventListener('click', closePay);
+    payOverlay && payOverlay.addEventListener('click', function (e) { if (e.target === payOverlay) closePay(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !payOverlay.hidden) closePay(); });
+    payDone && payDone.addEventListener('click', closePay);
+
+    buyBtn.addEventListener('click', function () {
+      if (!currentUser) { openAuth(); return; }
+      stash = {
+        orderId: 'C' + Date.now().toString(36).toUpperCase(),
+        product: 'coupon',
+        productName: '9.9 元优惠券',
+        qty: 1,
+        amount: PRICE,
+        name: currentUser.nickname || currentUser.email.split('@')[0],
+        contact: [currentUser.email, 'QQ:' + (currentUser.qq || ''), currentUser.phone || ''].filter(Boolean).join(' / ').slice(0, 80),
+        address: (currentUser.address || '未填写').slice(0, 200),
+        note: '优惠券订单 · ' + currentUser.email,
+        paidVia: 'qrcode',
+        page: location.pathname
+      };
+      amountEl.textContent = yuan(stash.amount);
+      openPay();
+    });
+
+    payPaid && payPaid.addEventListener('click', function () {
+      if (!stash) return;
+      payPaid.disabled = true;
+      var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
+      if (Date.now() - last < 60000) { payErr.textContent = '提交太频繁，请 1 分钟后再试'; payPaid.disabled = false; return; }
+      fetch(ORDER_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(stash) })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
+        .then(function () { localStorage.setItem('shop_last_submit', String(Date.now())); showPay('thanks'); })
+        .catch(function () { payErr.textContent = '提交失败，请检查网络后重试。'; })
+        .then(function () { payPaid.disabled = false; });
+    });
+  }
+
+  // ---- 初始化 ----
+  loadUser();
+})();
+
+</script>
 <script src="i18n.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script>
