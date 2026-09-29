@@ -565,6 +565,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .auth-btn[disabled]{opacity:.6;cursor:not-allowed}
 .auth-err{margin:8px 0 0;font-size:.78rem;color:#ff6b6b;text-align:center;min-height:1.2em}
 .auth-ok{margin:8px 0 0;font-size:.78rem;color:#30d158;text-align:center;min-height:1.2em}
+.auth-alt{margin:10px 0 0;font-size:.78rem;color:var(--text-muted);text-align:center}
+.auth-alt a{color:var(--accent);text-decoration:underline}
 .auth-hint{margin-top:14px;font-size:.8rem;color:var(--text-muted);line-height:1.7}
 .auth-section h4{margin:0 0 14px;font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 .auth-profile{display:grid;gap:14px}
@@ -708,6 +710,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         <div class="auth-field"><label>密码</label><input type="password" id="loginPassword" placeholder="密码" /></div>
         <button class="auth-btn" id="loginBtn" type="button">登录</button>
         <p class="auth-err" id="loginErr"></p>
+        <p class="auth-alt">忘记密码？<a href="https://www.caelus.top/account/" target="_blank" rel="noopener">去账号中心找回</a></p>
       </div>
 
       <div id="authRegisterPanel" hidden>
