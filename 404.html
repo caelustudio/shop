@@ -444,6 +444,7 @@
   .nf-btn:hover{filter:brightness(1.15);border-color:var(--accent)}
   .nf-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
+<link rel="stylesheet" href="/assets/cookie-consent.css?v=20260929">
 </head>
 <body>
 <div style="position:fixed;top:16px;right:20px;z-index:200;display:flex;gap:10px"><button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式">
@@ -515,5 +516,11 @@
 })();
 </script>
 <script src="i18n.js"></script>
+
+  <div class="cookie-bar" id="cookieBar" hidden>
+    <p>本站使用 Cookie 保存你的登录状态与界面偏好，不会用于广告或跨站追踪。详见<a href="https://www.caelus.top/doc/privacy/privacy-policy/">隐私政策</a>。</p>
+    <button type="button" id="cookieAccept">知道了</button>
+  </div>
+  <script src="/assets/cookie-consent.js?v=20260929"></script>
 </body>
 </html>
