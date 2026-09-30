@@ -567,6 +567,9 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .auth-ok{margin:8px 0 0;font-size:.78rem;color:#30d158;text-align:center;min-height:1.2em}
 .auth-alt{margin:10px 0 0;font-size:.78rem;color:var(--text-muted);text-align:center}
 .auth-alt a{color:var(--accent);text-decoration:underline}
+.auth-check{display:flex;align-items:flex-start;gap:8px;margin:0 0 12px;font-size:.78rem;line-height:1.6;color:var(--text-secondary);cursor:pointer}
+.auth-check input[type="checkbox"]{flex:none;width:15px;height:15px;margin-top:2px;accent-color:var(--accent);cursor:pointer}
+.auth-check a{color:var(--accent);text-decoration:underline}
 .auth-hint{margin-top:14px;font-size:.8rem;color:var(--text-muted);line-height:1.7}
 .auth-section h4{margin:0 0 14px;font-size:1.1rem;font-weight:600;color:var(--text-primary)}
 .auth-profile{display:grid;gap:14px}
@@ -710,6 +713,10 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         <div class="auth-field"><label>密码</label><input type="password" id="loginPassword" placeholder="密码" /></div>
         <button class="auth-btn" id="loginBtn" type="button">登录</button>
         <p class="auth-err" id="loginErr"></p>
+        <label class="auth-check">
+          <input type="checkbox" id="loginAgree" />
+          <span>我已阅读并同意<a href="https://www.caelus.top/doc/terms/service-terms/" target="_blank" rel="noopener">《服务条款》</a>与<a href="https://www.caelus.top/doc/privacy/privacy-policy/" target="_blank" rel="noopener">《隐私政策》</a></span>
+        </label>
         <p class="auth-alt">忘记密码？<a href="https://www.caelus.top/account/" target="_blank" rel="noopener">去账号中心找回</a></p>
       </div>
 
@@ -722,6 +729,14 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         </div>
         <div class="auth-field"><label>密码</label><input type="password" id="regPassword" placeholder="6-64 位密码" /></div>
         <div class="auth-field"><label>确认密码</label><input type="password" id="regPassword2" placeholder="再次输入密码" /></div>
+        <label class="auth-check">
+          <input type="checkbox" id="regAgree" />
+          <span>我已阅读并同意<a href="https://www.caelus.top/doc/terms/service-terms/" target="_blank" rel="noopener">《服务条款》</a>与<a href="https://www.caelus.top/doc/privacy/privacy-policy/" target="_blank" rel="noopener">《隐私政策》</a></span>
+        </label>
+        <label class="auth-check">
+          <input type="checkbox" id="regPromo" />
+          <span>我愿意接收 Caelus Studio 的产品与活动推广邮件（可随时退订）</span>
+        </label>
         <button class="auth-btn" id="regBtn" type="button">注册</button>
         <p class="auth-err" id="regErr"></p>
         <p class="auth-ok" id="regOk"></p>
@@ -859,7 +874,9 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     var email = document.getElementById('loginEmail').value.trim();
     var pw = document.getElementById('loginPassword').value;
     document.getElementById('loginErr').textContent = '';
-    authPost('/login', { email: email, password: pw }).then(function (r) {
+    var agEl = document.getElementById('loginAgree');
+    if (agEl && !agEl.checked) { document.getElementById('loginErr').textContent = '请先阅读并同意《服务条款》与《隐私政策》'; return; }
+    authPost('/login', { email: email, password: pw, agree: true }).then(function (r) {
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
@@ -904,7 +921,9 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     document.getElementById('regErr').textContent = '';
     document.getElementById('regOk').textContent = '';
     if (pw !== pw2) { document.getElementById('regErr').textContent = '两次密码不一致'; return; }
-    authPost('/register', { email: email, code: code, password: pw, nickname: nickname }).then(function (r) {
+    var rgEl = document.getElementById('regAgree'), pmEl = document.getElementById('regPromo');
+    if (rgEl && !rgEl.checked) { document.getElementById('regErr').textContent = '请先阅读并同意《服务条款》与《隐私政策》'; return; }
+    authPost('/register', { email: email, code: code, password: pw, nickname: nickname, agree: true, promo: !!(pmEl && pmEl.checked) }).then(function (r) {
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
@@ -1398,7 +1417,9 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     var email = document.getElementById('loginEmail').value.trim();
     var pw = document.getElementById('loginPassword').value;
     document.getElementById('loginErr').textContent = '';
-    authPost('/login', { email: email, password: pw }).then(function (r) {
+    var agEl = document.getElementById('loginAgree');
+    if (agEl && !agEl.checked) { document.getElementById('loginErr').textContent = '请先阅读并同意《服务条款》与《隐私政策》'; return; }
+    authPost('/login', { email: email, password: pw, agree: true }).then(function (r) {
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
@@ -1443,7 +1464,9 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     document.getElementById('regErr').textContent = '';
     document.getElementById('regOk').textContent = '';
     if (pw !== pw2) { document.getElementById('regErr').textContent = '两次密码不一致'; return; }
-    authPost('/register', { email: email, code: code, password: pw, nickname: nickname }).then(function (r) {
+    var rgEl = document.getElementById('regAgree'), pmEl = document.getElementById('regPromo');
+    if (rgEl && !rgEl.checked) { document.getElementById('regErr').textContent = '请先阅读并同意《服务条款》与《隐私政策》'; return; }
+    authPost('/register', { email: email, code: code, password: pw, nickname: nickname, agree: true, promo: !!(pmEl && pmEl.checked) }).then(function (r) {
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
