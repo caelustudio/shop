@@ -711,6 +711,10 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       <div id="authLoginPanel">
         <div class="auth-field"><label>电子邮箱</label><input type="email" id="loginEmail" placeholder="you@example.com" /></div>
         <div class="auth-field"><label>密码</label><input type="password" id="loginPassword" placeholder="密码" /></div>
+        <label class="auth-check">
+          <input type="checkbox" id="loginRemember" />
+          <span>保留登录信息（最长 30 天）</span>
+        </label>
         <button class="auth-btn" id="loginBtn" type="button">登录</button>
         <p class="auth-err" id="loginErr"></p>
         <label class="auth-check">
@@ -736,6 +740,10 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         <label class="auth-check">
           <input type="checkbox" id="regPromo" />
           <span>我愿意接收 Caelus Studio 的产品与活动推广邮件（可随时退订）</span>
+        </label>
+        <label class="auth-check">
+          <input type="checkbox" id="regRemember" />
+          <span>保留登录信息（最长 30 天）</span>
         </label>
         <button class="auth-btn" id="regBtn" type="button">注册</button>
         <p class="auth-err" id="regErr"></p>
@@ -880,7 +888,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
-        setCookie(COOKIE_NAME, r.token, 30);
+        var rmEl = document.getElementById('loginRemember');
+        setCookie(COOKIE_NAME, r.token, (rmEl && rmEl.checked) ? 30 : 0);
         renderAuthPanel();
         renderNav();
       } else {
@@ -927,7 +936,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
-        setCookie(COOKIE_NAME, r.token, 30);
+        var rmEl = document.getElementById('regRemember');
+        setCookie(COOKIE_NAME, r.token, (rmEl && rmEl.checked) ? 30 : 0);
         renderAuthPanel();
         renderNav();
       } else {
@@ -1423,7 +1433,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
-        setCookie(COOKIE_NAME, r.token, 30);
+        var rmEl = document.getElementById('loginRemember');
+        setCookie(COOKIE_NAME, r.token, (rmEl && rmEl.checked) ? 30 : 0);
         renderAuthPanel();
         renderNav();
       } else {
@@ -1470,7 +1481,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       if (r.ok) {
         currentToken = r.token;
         currentUser = r.user;
-        setCookie(COOKIE_NAME, r.token, 30);
+        var rmEl = document.getElementById('regRemember');
+        setCookie(COOKIE_NAME, r.token, (rmEl && rmEl.checked) ? 30 : 0);
         renderAuthPanel();
         renderNav();
       } else {
