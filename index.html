@@ -1617,15 +1617,18 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   var qtySel = document.getElementById('pfQty');
   var totalEl = document.getElementById('pfTotal');
   var errEl = document.getElementById('pfErr');
-  var current = null;
+  var current = null, paidDone = false;
 
   function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+  // 漏斗埋点（site=shop）：order_paid_click 确认已付款 / ok 落库成功 / fail 提交失败 / abandon 未确认就关闭
+  function track(ev, meta) { try { if (window.caelusTrack) window.caelusTrack(ev, meta || {}); } catch (_) {} }
   function show(step) {
     stepPay.hidden = step !== 'pay';
     stepForm.hidden = step !== 'form';
     stepThanks.hidden = step !== 'thanks';
   }
   function openPay(p) {
+    paidDone = false;
     current = p;
     amountEl.textContent = yuan(p.price);
     updateTotal();
@@ -1633,7 +1636,15 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     show('pay');
     overlay.hidden = false;
   }
-  function close() { overlay.hidden = true; }
+  function close() {
+    if (!paidDone && current) {
+      track('order_paid_abandon', {
+        product: current.id, productName: current.name, amount: current.price,
+        stage: stepThanks.hidden && stepForm.hidden ? 'pay' : 'form'
+      });
+    }
+    overlay.hidden = true;
+  }
   function updateTotal() {
     if (current) totalEl.textContent = yuan(current.price * Number(qtySel.value || 1));
   }
@@ -1646,6 +1657,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     form.reset();
     updateTotal();
     errEl.textContent = '';
+    track('order_paid_click', { product: current ? current.id : '', productName: current ? current.name : '', amount: current ? current.price : 0 });
     show('form');
   });
   document.getElementById('pfBack').addEventListener('click', function () { show('pay'); });
@@ -1683,8 +1695,16 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       body: JSON.stringify(payload)
     })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
-      .then(function () { show('thanks'); })
-      .catch(function () {
+      .then(function () {
+        paidDone = true;
+        track('order_paid_ok', { orderId: payload.orderId, product: payload.product, productName: payload.productName, amount: payload.amount });
+        show('thanks');
+      })
+      .catch(function (e) {
+        track('order_paid_fail', {
+          orderId: payload.orderId, product: payload.product, productName: payload.productName,
+          amount: payload.amount, reason: String((e && e.message) || 'network')
+        });
         errEl.textContent = '提交失败，请检查网络后重试。';
       })
       .then(function () { btn.disabled = false; });

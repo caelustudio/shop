@@ -1027,12 +1027,19 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     var payPaid = document.getElementById('payPaid');
     var payClose = document.getElementById('payClose');
     var payDone = document.getElementById('payDone');
-    var stash = null;
+    var stash = null, paidDone = false;
 
     function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
+    // 漏斗埋点（site=shop）
+    function track(ev, meta) { try { if (window.caelusTrack) window.caelusTrack(ev, meta || {}); } catch (_) {} }
     function showPay(step) { stepPay.hidden = step !== 'pay'; stepThanks.hidden = step !== 'thanks'; }
     function openPay() { showPay('pay'); payErr.textContent = ''; payOverlay.hidden = false; }
-    function closePay() { payOverlay.hidden = true; }
+    function closePay() {
+      if (!paidDone && stash) {
+        track('order_paid_abandon', { product: stash.product, productName: stash.productName, amount: stash.amount });
+      }
+      payOverlay.hidden = true;
+    }
 
     payClose && payClose.addEventListener('click', closePay);
     payOverlay && payOverlay.addEventListener('click', function (e) { if (e.target === payOverlay) closePay(); });
@@ -1055,6 +1062,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         page: location.pathname
       };
       amountEl.textContent = yuan(stash.amount);
+      track('order_submit', { orderId: stash.orderId, product: stash.product, productName: stash.productName, amount: stash.amount });
       openPay();
     });
 
@@ -1063,10 +1071,22 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       payPaid.disabled = true;
       var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
       if (Date.now() - last < 60000) { payErr.textContent = '提交太频繁，请 1 分钟后再试'; payPaid.disabled = false; return; }
+      track('order_paid_click', { orderId: stash.orderId, product: stash.product, productName: stash.productName, amount: stash.amount });
       fetch(ORDER_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(stash) })
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
-        .then(function () { localStorage.setItem('shop_last_submit', String(Date.now())); showPay('thanks'); })
-        .catch(function () { payErr.textContent = '提交失败，请检查网络后重试。'; })
+        .then(function () {
+          paidDone = true;
+          localStorage.setItem('shop_last_submit', String(Date.now()));
+          track('order_paid_ok', { orderId: stash.orderId, product: stash.product, productName: stash.productName, amount: stash.amount });
+          showPay('thanks');
+        })
+        .catch(function (e) {
+          track('order_paid_fail', {
+            orderId: stash.orderId, product: stash.product, productName: stash.productName,
+            amount: stash.amount, reason: String((e && e.message) || 'network')
+          });
+          payErr.textContent = '提交失败，请检查网络后重试。';
+        })
         .then(function () { payPaid.disabled = false; });
     });
   }
