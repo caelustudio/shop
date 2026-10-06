@@ -90,6 +90,7 @@
     '🎆 隐藏款「烟花」': ['🎆 隐藏款「烟花」', '🎆 隱藏款「煙花」', '🎆 Hidden edition: Fireworks'],
     '每一枚钥匙扣都藏着一个小彩蛋：全新的「烟花」款以黑色亚克力为底，三簇彩色烟花环绕 C 形 Logo，只送不卖。': ['每一枚钥匙扣都藏着一个小彩蛋：全新的「烟花」款以黑色亚克力为底，三簇彩色烟花环绕 C 形 Logo，只送不卖。', '每一枚鑰匙扣都藏著一個小彩蛋：全新的「煙花」款以黑色壓克力為底，三簇彩色煙花環繞 C 形 Logo，只送不賣。', 'Every keychain hides a little surprise: the new Fireworks edition puts three colorful fireworks around the C logo on black acrylic. Not for sale — win it.'],
     '完成一笔订单即可参与一次文字抽奖，结果当场揭晓——抽中的话，「烟花」会随你的订单一起寄出。': ['完成一笔订单即可参与一次文字抽奖，结果当场揭晓——抽中的话，「烟花」会随你的订单一起寄出。', '完成一筆訂單即可參與一次文字抽獎，結果當場揭曉——抽中的話，「煙花」會隨你的訂單一起寄出。', 'Each order lets you play the text lottery once and see the result on the spot. If you win, the Fireworks edition ships with your order.'],
+    '10.7结束活动': ['10.7结束活动', '10.7結束活動', 'Activity ends 10.7'],
     '🎁 抽隐藏款 · 试手气': ['🎁 抽隐藏款 · 试手气', '🎁 抽隱藏款 · 試手氣', '🎁 Try your luck'],
     '🎉 恭喜！你抽中了隐藏款「烟花」！我们会随订单一起寄出。': ['🎉 恭喜！你抽中了隐藏款「烟花」！我们会随订单一起寄出。', '🎉 恭喜！你抽中了隱藏款「煙花」！我們會隨訂單一起寄出。', '🎉 Congratulations! You won the hidden Fireworks edition! It will ship with your order.'],
     '很遗憾，这次与「烟花」擦肩而过，谢谢参与～': ['很遗憾，这次与「烟花」擦肩而过，谢谢参与～', '很遺憾，這次與「煙花」擦肩而過，謝謝參與～', 'So close! No luck this time — thanks for playing.'],
