@@ -583,13 +583,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 .nav-account:hover{background:var(--bg-card)}
 @media (prefers-reduced-motion:reduce){.auth-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
-<style>
-/* ===== 优惠券购买区 ===== */
-.buy-card{text-align:center;padding:10px 0}
-.buy-price{font-size:1.1rem;color:var(--text-secondary);margin:0 0 8px}
-.buy-price strong{font-size:1.8rem;color:var(--price-color);font-weight:700}
-.buy-tip{font-size:.85rem;color:var(--text-muted);margin:0 0 18px}
-</style>
+
 <link rel="stylesheet" href="/assets/cookie-consent.css?v=20260930">
 <script src="/assets/cookie-consent.js?v=20260930"></script>
 </head>
@@ -641,17 +635,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     </div>
   </a>
 
-  <a class="product-card reveal" style="--reveal-delay:0.06s" href="coupon.html">
-    <div class="thumb"><img src="assets/coupon-banner.png" alt="9.9 元优惠券" loading="lazy"></div>
-    <div class="body">
-      <h2>9.9 元优惠券</h2>
-      <p>全场通用优惠券，下单自动抵扣 9.9 元，有效期至 2026-12-31。</p>
-      <div class="card-foot">
-        <span class="card-price">￥9.9</span>
-        <span class="card-more">查看详情 →</span>
-      </div>
-    </div>
-  </a>
+  
 
   <div class="product-card reveal" style="--reveal-delay:0.12s">
     <div class="thumb"><div class="thumb-pending">敬请期待</div></div>
@@ -780,7 +764,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 
 
 <script>
-/* ===== 账号系统 + 优惠券购买流程 ===== */
+/* ===== 账号系统 ===== */
 (function () {
   var AUTH_API = 'https://caelus-terminal.app.workbuddy.host/api/auth';
   var ORDER_API = 'https://caelus-terminal.app.workbuddy.host/api/order';
@@ -992,60 +976,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     });
   });
 
-  // ---- 支付流程 ----
-  var buyBtn = document.getElementById('buyBtn');
-  var payOverlay = document.getElementById('payOverlay');
-  if (buyBtn && payOverlay) {
-    var stepPay = document.getElementById('payStepPay');
-    var stepThanks = document.getElementById('payStepThanks');
-    var amountEl = document.getElementById('payAmount');
-    var payErr = document.getElementById('payErr');
-    var payPaid = document.getElementById('payPaid');
-    var payClose = document.getElementById('payClose');
-    var payDone = document.getElementById('payDone');
-    var stash = null;
-
-    function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
-    function showPay(step) { stepPay.hidden = step !== 'pay'; stepThanks.hidden = step !== 'thanks'; }
-    function openPay() { showPay('pay'); payErr.textContent = ''; payOverlay.hidden = false; }
-    function closePay() { payOverlay.hidden = true; }
-
-    payClose && payClose.addEventListener('click', closePay);
-    payOverlay && payOverlay.addEventListener('click', function (e) { if (e.target === payOverlay) closePay(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !payOverlay.hidden) closePay(); });
-    payDone && payDone.addEventListener('click', closePay);
-
-    buyBtn.addEventListener('click', function () {
-      if (!currentUser) { openAuth(); return; }
-      stash = {
-        orderId: 'C' + Date.now().toString(36).toUpperCase(),
-        product: 'coupon',
-        productName: '9.9 元优惠券',
-        qty: 1,
-        amount: PRICE,
-        name: currentUser.nickname || currentUser.email.split('@')[0],
-        contact: [currentUser.email, 'QQ:' + (currentUser.qq || ''), currentUser.phone || ''].filter(Boolean).join(' / ').slice(0, 80),
-        address: (currentUser.address || '未填写').slice(0, 200),
-        note: '优惠券订单 · ' + currentUser.email,
-        paidVia: 'qrcode',
-        page: location.pathname
-      };
-      amountEl.textContent = yuan(stash.amount);
-      openPay();
-    });
-
-    payPaid && payPaid.addEventListener('click', function () {
-      if (!stash) return;
-      payPaid.disabled = true;
-      var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
-      if (Date.now() - last < 60000) { payErr.textContent = '提交太频繁，请 1 分钟后再试'; payPaid.disabled = false; return; }
-      fetch(ORDER_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(stash) })
-        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
-        .then(function () { localStorage.setItem('shop_last_submit', String(Date.now())); showPay('thanks'); })
-        .catch(function () { payErr.textContent = '提交失败，请检查网络后重试。'; })
-        .then(function () { payPaid.disabled = false; });
-    });
-  }
+  
 
   // ---- 初始化 ----
   loadUser();
@@ -1325,7 +1256,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 </script>
 <script>(function(){if(window.top!==window.self)return;var T='https://caelus-terminal.app.workbuddy.host/api/collect';function t(e,m){try{m=m||{};if(document.title&&!m.title)m.title=String(document.title).replace(/\s*[·|-]\s*Caelus Studio.*$/i,'').slice(0,60);var v=localStorage.getItem('caelus_vid');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('caelus_vid',v)}navigator.sendBeacon(T,JSON.stringify({site:'shop',event:e,meta:m,path:location.pathname,ref:document.referrer,vid:v}))}catch(_){}}window.caelusTrack=t;t('page_view');})();</script>
 <script>
-/* ===== 账号系统 + 优惠券购买流程 ===== */
+/* ===== 账号系统 ===== */
 (function () {
   var AUTH_API = 'https://caelus-terminal.app.workbuddy.host/api/auth';
   var ORDER_API = 'https://caelus-terminal.app.workbuddy.host/api/order';
@@ -1537,60 +1468,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     });
   });
 
-  // ---- 支付流程 ----
-  var buyBtn = document.getElementById('buyBtn');
-  var payOverlay = document.getElementById('payOverlay');
-  if (buyBtn && payOverlay) {
-    var stepPay = document.getElementById('payStepPay');
-    var stepThanks = document.getElementById('payStepThanks');
-    var amountEl = document.getElementById('payAmount');
-    var payErr = document.getElementById('payErr');
-    var payPaid = document.getElementById('payPaid');
-    var payClose = document.getElementById('payClose');
-    var payDone = document.getElementById('payDone');
-    var stash = null;
-
-    function yuan(n) { return '\u00a5' + Number(n).toFixed(2); }
-    function showPay(step) { stepPay.hidden = step !== 'pay'; stepThanks.hidden = step !== 'thanks'; }
-    function openPay() { showPay('pay'); payErr.textContent = ''; payOverlay.hidden = false; }
-    function closePay() { payOverlay.hidden = true; }
-
-    payClose && payClose.addEventListener('click', closePay);
-    payOverlay && payOverlay.addEventListener('click', function (e) { if (e.target === payOverlay) closePay(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !payOverlay.hidden) closePay(); });
-    payDone && payDone.addEventListener('click', closePay);
-
-    buyBtn.addEventListener('click', function () {
-      if (!currentUser) { openAuth(); return; }
-      stash = {
-        orderId: 'C' + Date.now().toString(36).toUpperCase(),
-        product: 'coupon',
-        productName: '9.9 元优惠券',
-        qty: 1,
-        amount: PRICE,
-        name: currentUser.nickname || currentUser.email.split('@')[0],
-        contact: [currentUser.email, 'QQ:' + (currentUser.qq || ''), currentUser.phone || ''].filter(Boolean).join(' / ').slice(0, 80),
-        address: (currentUser.address || '未填写').slice(0, 200),
-        note: '优惠券订单 · ' + currentUser.email,
-        paidVia: 'qrcode',
-        page: location.pathname
-      };
-      amountEl.textContent = yuan(stash.amount);
-      openPay();
-    });
-
-    payPaid && payPaid.addEventListener('click', function () {
-      if (!stash) return;
-      payPaid.disabled = true;
-      var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
-      if (Date.now() - last < 60000) { payErr.textContent = '提交太频繁，请 1 分钟后再试'; payPaid.disabled = false; return; }
-      fetch(ORDER_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(stash) })
-        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
-        .then(function () { localStorage.setItem('shop_last_submit', String(Date.now())); showPay('thanks'); })
-        .catch(function () { payErr.textContent = '提交失败，请检查网络后重试。'; })
-        .then(function () { payPaid.disabled = false; });
-    });
-  }
+  
 
   // ---- 初始化 ----
   loadUser();
