@@ -102,11 +102,6 @@
     '返回商店': ['返回商店', '返回商店', 'Back to shop'],
     '看看钥匙扣': ['看看钥匙扣', '看看鑰匙扣', 'View keychain'],
     '查询订单': ['查询订单', '查詢訂單', 'Track order'],
-    '正在加载人机验证…': ['正在加载人机验证…', '正在載入人機驗證…', 'Loading verification…'],
-    '请先完成人机验证。': ['请先完成人机验证。', '請先完成人機驗證。', 'Please complete the verification first.'],
-    '人机验证已过期，请重新验证。': ['人机验证已过期，请重新验证。', '人機驗證已過期，請重新驗證。', 'Verification expired. Please verify again.'],
-    '人机验证加载失败，请刷新页面后重试。': ['人机验证加载失败，请刷新页面后重试。', '人機驗證載入失敗，請重新整理頁面後重試。', 'Verification failed to load. Please refresh and try again.'],
-    '人机验证组件未加载，请刷新页面后重试。': ['人机验证组件未加载，请刷新页面后重试。', '人機驗證元件未載入，請重新整理頁面後重試。', 'Verification component did not load. Please refresh and try again.'],
   };
 
   var LABEL = { 'zh-CN': '简', 'zh-TW': '繁', 'en': 'EN' };
