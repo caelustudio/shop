@@ -761,7 +761,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     if (!form.checkValidity()) { form.reportValidity(); return; }
     // 人机验证：打开收款码前先确认已通过
     var cfErr = document.getElementById('kcCfErr');
-    var cfCheck = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: true, token: '' };
+    var cfCheck = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: false, token: '', message: '人机验证组件未加载，请刷新页面后重试。' };
     if (!cfCheck.ok) { cfErr.textContent = cfCheck.message; cfErr.hidden = false; return; }
     cfErr.hidden = true;
     // 60 秒限频
@@ -794,7 +794,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   paidBtn.addEventListener('click', function () {
     if (!stash) return;
     /* 真正写库前再取一次 token，避免验证已过期 */
-    var cfPay = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: true, token: '' };
+    var cfPay = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: false, token: '', message: '人机验证组件未加载，请刷新页面后重试。' };
     if (!cfPay.ok) {
       errEl.textContent = cfPay.message;
       if (window.CaelusTurnstile) window.CaelusTurnstile.reset();

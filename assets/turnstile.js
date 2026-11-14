@@ -75,7 +75,7 @@
           'expired-callback': function () {
             try { window.turnstile.reset(w.id); } catch (_) {}
           },
-          'error-callback': function () { status(w.el, MSG.failed); }
+          'error-callback': function () { w.id = null; status(w.el, MSG.failed); }
         });
       } catch (_) {
         w.id = null;

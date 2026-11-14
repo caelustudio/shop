@@ -1549,7 +1549,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     /* 人机验证：未通过或验证服务未就绪时阻止提交 */
-    var cfCheck = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: true, token: '' };
+    var cfCheck = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: false, token: '', message: '人机验证组件未加载，请刷新页面后重试。' };
     if (!cfCheck.ok) { errEl.textContent = cfCheck.message; return; }
     var name = document.getElementById('pfName').value.trim();
     var contact = document.getElementById('pfContact').value.trim();
