@@ -1205,6 +1205,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         <div class="pf-row"><label for="pfNote">留言（选填）</label><input id="pfNote" maxlength="120" placeholder="想对我们说的话"></div>
         <p class="pay-total">应付总额：<strong id="pfTotal"></strong></p>
         <p class="pay-err" id="pfErr"></p>
+        <div class="cf-box" id="pfTurnstile"></div>
         <button class="pay-btn" id="pfSubmit" type="submit">提交订单</button>
       </form>
       <button class="pay-ghost" id="pfBack" type="button">← 返回付款</button>
@@ -1476,6 +1477,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 
 </script>
 <script src="i18n.js"></script>
+<script src="assets/turnstile.js?v=20261115"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script>
 /* ===== 在线支付（收款码版：扫码 → 我已支付 → 订单表单 → 感谢页） ===== */
@@ -1537,6 +1539,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     errEl.textContent = '';
     track('order_paid_click', { product: current ? current.id : '', productName: current ? current.name : '', amount: current ? current.price : 0 });
     show('form');
+    /* 表单步骤此时才可见，Turnstile 必须在可见容器内渲染 */
+    if (window.CaelusTurnstile) window.CaelusTurnstile.mount('pfTurnstile');
   });
   document.getElementById('pfBack').addEventListener('click', function () { show('pay'); });
   document.getElementById('payDone').addEventListener('click', close);
@@ -1544,6 +1548,9 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    /* 人机验证：未通过或验证服务未就绪时阻止提交 */
+    var cfCheck = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: false, token: '', message: '人机验证组件未加载，请刷新页面后重试。' };
+    if (!cfCheck.ok) { errEl.textContent = cfCheck.message; return; }
     var name = document.getElementById('pfName').value.trim();
     var contact = document.getElementById('pfContact').value.trim();
     var address = document.getElementById('pfAddress').value.trim();
@@ -1565,7 +1572,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
       address: address,
       note: document.getElementById('pfNote').value.trim(),
       paidVia: 'qrcode',
-      page: location.pathname
+      page: location.pathname,
+      turnstileToken: cfCheck.token
     };
     fetch(ORDER_API, {
       method: 'POST',
@@ -1585,7 +1593,11 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         });
         errEl.textContent = '提交失败，请检查网络后重试。';
       })
-      .then(function () { btn.disabled = false; });
+      .then(function () {
+        btn.disabled = false;
+        /* token 一次性，无论成功失败都重置 */
+        if (window.CaelusTurnstile) window.CaelusTurnstile.reset();
+      });
   });
 
   })();

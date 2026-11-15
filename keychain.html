@@ -541,6 +541,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
           <label>备注</label>
           <input type="text" name="备注" maxlength="100" placeholder="选填" />
         </div>
+        <div class="cf-box" id="kcTurnstile"></div>
+        <p class="cf-err" id="kcCfErr" hidden></p>
         <button class="submit-btn" type="submit">去支付</button>
         <p class="form-note">我们将在 15 个工作日内联系你并发货。购买即代表你同意<a href="https://caelustudio.feishu.cn/wiki/space/7668877677914278860?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home" target="_blank" rel="noopener">《Caelus Studio 周边产品发放及购买协议》及相关协议和政策</a>。</p>
       </div>
@@ -648,6 +650,7 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 </script>
 <script>(function(){if(window.top!==window.self)return;var T='https://caelus-terminal.app.workbuddy.host/api/collect';function t(e,m){try{m=m||{};if(document.title&&!m.title)m.title=String(document.title).replace(/\s*[·|-]\s*Caelus Studio.*$/i,'').slice(0,60);var v=localStorage.getItem('caelus_vid');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('caelus_vid',v)}navigator.sendBeacon(T,JSON.stringify({site:'shop',event:e,meta:m,path:location.pathname,ref:document.referrer,vid:v}))}catch(_){}}window.caelusTrack=t;t('page_view');var f=document.querySelector('.order-card form');if(f)f.addEventListener('submit',function(){t('order_submit')},true);})();</script>
 <script src="i18n.js"></script>
+<script src="assets/turnstile.js?v=20261115"></script>
 <!-- ===== 商店维护提示（追加） ===== -->
 <!-- ===== 支付弹窗（收款码 → 我已支付 → 感谢） ===== -->
 <style>
@@ -721,6 +724,8 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
   var form = document.getElementById('orderForm');
   var overlay = document.getElementById('payOverlay');
   if (!form || !overlay) return;
+  /* 订购表单始终可见，直接渲染 Turnstile 验证组件 */
+  if (window.CaelusTurnstile) window.CaelusTurnstile.mount('kcTurnstile');
   var stepPay = document.getElementById('payStepPay');
   var stepThanks = document.getElementById('payStepThanks');
   var amountEl = document.getElementById('payAmount');
@@ -754,6 +759,11 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
     e.preventDefault();
     // 原生必填校验
     if (!form.checkValidity()) { form.reportValidity(); return; }
+    // 人机验证：打开收款码前先确认已通过
+    var cfErr = document.getElementById('kcCfErr');
+    var cfCheck = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: false, token: '', message: '人机验证组件未加载，请刷新页面后重试。' };
+    if (!cfCheck.ok) { cfErr.textContent = cfCheck.message; cfErr.hidden = false; return; }
+    cfErr.hidden = true;
     // 60 秒限频
     var last = parseInt(localStorage.getItem('shop_last_submit') || '0', 10);
     if (Date.now() - last < 60000) {
@@ -783,6 +793,14 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
 
   paidBtn.addEventListener('click', function () {
     if (!stash) return;
+    /* 真正写库前再取一次 token，避免验证已过期 */
+    var cfPay = window.CaelusTurnstile ? window.CaelusTurnstile.guard() : { ok: false, token: '', message: '人机验证组件未加载，请刷新页面后重试。' };
+    if (!cfPay.ok) {
+      errEl.textContent = cfPay.message;
+      if (window.CaelusTurnstile) window.CaelusTurnstile.reset();
+      return;
+    }
+    stash.turnstileToken = cfPay.token;
     paidBtn.disabled = true;
     localStorage.setItem('shop_last_submit', String(Date.now()));
     track('order_paid_click', { orderId: stash.orderId, product: stash.product, productName: stash.productName, amount: stash.amount });
@@ -803,7 +821,11 @@ h1,h2,h3,h4,h5,h6{font-weight:500 !important;-webkit-text-stroke:.3px currentCol
         });
         errEl.textContent = '提交失败，请检查网络后重试。';
       })
-      .then(function () { paidBtn.disabled = false; });
+      .then(function () {
+        paidBtn.disabled = false;
+        /* token 一次性，提交后重置 */
+        if (window.CaelusTurnstile) window.CaelusTurnstile.reset();
+      });
   });
 })();
 </script>
